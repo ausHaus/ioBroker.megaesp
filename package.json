@@ -1,0 +1,63 @@
+{
+  "name": "iobroker.megaesp",
+  "version": "0.0.1",
+  "description": "Lets control the Mega-ESP over ethernet (http://www.ab-log.ru/smart-house/ethernet/megad-328) from ioBroker",
+  "author": {
+    "name": "bluefox",
+    "email": "dogafox@gmail.com"
+  },
+  "homepage": "https://github.com/ioBroker/ioBroker.megaesp",
+  "keywords": [
+    "ioBroker",
+    "Mega-ESP"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ioBroker/ioBroker.megaesp.git"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-replace": "^1.0.1",
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-jscs": "^2.8.0",
+    "grunt-http": "^2.0.1",
+    "mocha": "^2.4.5",
+    "chai": "^3.5.0",
+    "keypress": "*"
+  },
+  "bugs": {
+    "url": "https://github.com/ioBroker/ioBroker.megaesp/issues"
+  },
+  "main": "main.js",
+  "scripts": {
+    "test": "node node_modules/mocha/bin/mocha"
+  },
+  "license": "MIT",
+  "gitHead": "89467dfb7d3808675d8ed7d64637d7da7a214b1e",
+  "_id": "iobroker.megad@1.2.0",
+  "_shasum": "e83ded5e2b0493e0422e18f80a5d294ee6079ec7",
+  "_from": "iobroker.megad@latest",
+  "_npmVersion": "2.14.12",
+  "_nodeVersion": "4.3.1",
+  "_npmUser": {
+    "name": "bluefox",
+    "email": "dogafox@gmail.com"
+  },
+  "dist": {
+    "shasum": "e83ded5e2b0493e0422e18f80a5d294ee6079ec7",
+    "tarball": "https://registry.npmjs.org/iobroker.megad/-/iobroker.megad-1.2.0.tgz"
+  },
+  "maintainers": [
+    {
+      "name": "bluefox",
+      "email": "dogafox@gmail.com"
+    }
+  ],
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/iobroker.megad-1.2.0.tgz_1462304486625_0.008463089121505618"
+  },
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/iobroker.megad/-/iobroker.megad-1.2.0.tgz"
+}

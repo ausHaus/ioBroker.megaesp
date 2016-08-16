@@ -1,0 +1,66 @@
+{
+    "common": {
+        "name":                     "megaesp",
+        "version":                  "0.0.1",
+        "title":                    "Mega-ESP Adapter",
+        "desc":                     {
+            "en": "Lets control the Mega-ESP over ethernet/internet (http://www.ab-log.ru/smart-house/ethernet/megad-328)",
+            "de": "Ermöglicht die steuerung von Mega-ESP über Ethernet/Internet (http://www.ab-log.ru/smart-house/ethernet/megad-328)",
+            "ru": "Позволяет управлять Mega-ESP через ethernet/интернет (http://www.ab-log.ru/smart-house/ethernet/megad-328)"
+        },
+        "authors": [
+            "bluefox <bluefox@ccu.io>"
+        ],
+        "license":                  "MIT",
+        "platform":                 "Javascript/Node.js",
+        "mode":                     "daemon",
+        "loglevel":                 "info",
+        "icon":                     "megad.png",
+        "messagebox":               true,
+        "readme":                   "https://raw.githubusercontent.com/ioBroker/ioBroker.megaesp/master/README.md",
+        "keywords":                 ["Mega-ESP", "communication"],
+		"enabled":                  true,
+        "extIcon":                  "https://raw.githubusercontent.com/ioBroker/ioBroker.megad/master/admin/megad.png",
+        "type":                     "hardware",
+        "localLink":                "http://%native_ip%/%password%",
+        "config": {
+            "width":     1050,
+            "height":    800,
+            "minWidth":  600,
+            "minHeight": 500
+        }
+    },
+    "native": {
+        "ip":                       "",
+        "name":                     "",
+        "port":                     80,
+        "pollInterval":             30,
+        "password":                 "sec",
+        "longPress":                700,
+        "doublePress":              600,
+        "ports":                    []
+    },
+    "instanceObjects": [
+        {
+            "_id":  "info",
+            "type": "channel",
+            "common": {
+                "name": "Information"
+            },
+            "native": {}
+        },
+        {
+            "_id":  "info.connection",
+            "type": "state",
+            "common": {
+                "role":  "indicator.connected",
+                "name":  "If connected to MegaESP",
+                "type":  "boolean",
+                "read":  true,
+                "write": false,
+                "def":   false
+            },
+            "native": {}
+        }
+    ]
+}

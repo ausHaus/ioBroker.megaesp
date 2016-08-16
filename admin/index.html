@@ -1,0 +1,1108 @@
+<html>
+
+<link rel="stylesheet" type="text/css" href="../../lib/css/themes/jquery-ui/redmond/jquery-ui.min.css"/>
+<link rel="stylesheet" type="text/css" href="../../lib/css/jqGrid/ui.jqgrid-4.5.4.css"/>
+<script type="text/javascript" src="../../lib/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="../../socket.io/socket.io.js"></script>
+<script type="text/javascript" src="../../lib/js/jquery-ui-1.10.3.full.min.js"></script>
+<script type="text/javascript" src="../../lib/js/jqGrid/jquery.jqGrid-4.5.4.min.js"></script>
+<script type="text/javascript" src="../../lib/js/jqGrid/grid.locale-all.js"></script>
+
+<link rel="stylesheet" type="text/css" href="../../css/adapter.css"/>
+<script type="text/javascript" src="../../js/translate.js"></script>
+<script type="text/javascript" src="../../js/adapter-settings.js"></script>
+
+<style>
+    .no-space {
+        border: 0px !important;
+        margin: 0px;
+        padding: 0px;
+        border-spacing: 0px;
+        border-image-width: 0px;
+    }
+</style>
+
+<script type="text/javascript">
+    systemDictionary = {
+        "MegaESP Name:":        {"en": "MegaESP Name:",         "de": "MegaESP Name:",              "ru": "MegaESP Имя:"},
+        "ioBroker Web Port:":   {"en": "ioBroker Web Port:",    "de": "ioBroker Web Port:",         "ru": "ioBroker веб-порт:"},
+        "Poll interval (sec):": {"en": "Poll interval (sec):",  "de": "Abfrage Intervall (sek):",   "ru": "Интервал опроса (сек):"},
+        "MegaESP Password:":    {"en": "MegaESP Password:",     "de": "MegaESP Kennword:",          "ru": "MegaESP Пароль:"},
+        "name":                 {"en": "Name",                  "de": "Name",                       "ru": "Имя"},
+        "input":                {"en": "Input",                 "de": "Eingang",                    "ru": "Вход"},
+        "switch":               {"en": "Switch",                "de": "Schalter",                   "ru": "Переключатель"},
+        "offset":               {"en": "Offset",                "de": "Offset",                     "ru": "Сдвиг"},
+        "factor":               {"en": "Factor",                "de": "Factor",                     "ru": "Множитель"},
+        "digital":              {"en": "Digital",               "de": "Digital",                    "ru": "Цифровой"},
+        "long":                 {"en": "Long press",            "de": "Long press",                 "ru": "Удержание"},
+        "double":               {"en": "Double click ms",       "de": "Double click ms",            "ru": "Двойное нажатие"},
+        "Ports":                {"en": "Ports",                 "de": "Ports",                      "ru": "Порты"},
+        "Long press detect (ms):": {"en": "Long press detection (ms):", "de": "Langes-Drucken-Erkennung (ms):", "ru": "Интервал для длинного нажатия (мс):"},
+        "Mega-ESP adapter settings": {"en": "Mega-ESP adapter settings", "de": "Mega-ESP Adaptereinstellungen", "ru": "Mega-ESP настройки"},
+        "IP:":                  {"en": "MegaESP IP:",           "de": "MegaESP IP:",                "ru": "IP Адрес устройства:"},
+        "Double press detect (ms):": {"en": "Double press detect (ms):", "de": "Doppelclick-Interval(ms):", "ru": "Интервал двойного нажатия (мс):"},
+        "Add new port":         {"en": "Add new port",          "de": "Neuer Port",                 "ru": "Добавить порт"},
+        "Auto detect ports":    {"en": "Auto detect ports",     "de": "Auto-Detekt die Ports",      "ru": "Считать настройки с MegaESP"},
+        "Write config to device": {"en": "Write config to device", "de": "Konfiguration in das Gerät schreiben", "ru": "Записать настройки в устройство"},
+        "Name":                 {"en": "Name",                  "de": "Name",                       "ru": "Имя"},
+        "Room":                 {"en": "Room",                  "de": "Zimmer",                     "ru": "Комната"},
+        "Role":                 {"en": "Role",                  "de": "Rolle",                      "ru": "Роль"},
+        "Type":                 {"en": "Type",                  "de": "Typ",                        "ru": "Тип"},
+        "Mode":                 {"en": "Mode",                  "de": "Modus",                      "ru": "Режим"},
+        "NC":                   {"en": "Not configured",        "de": "nicht benutzt",              "ru": "не используется"},
+        "Input":                {"en": "Input",                 "de": "Input",                      "ru": "Циф. вход"},
+        "Output":               {"en": "Output",                "de": "Output",                     "ru": "Циф. выход"},
+        "Output SW":            {"en": "Output SW",             "de": "Output SW",                  "ru": "Циф. выход SW"},
+        "Output SL":            {"en": "Output SL",             "de": "Output SL",                  "ru": "Циф. выход SL"},
+        "Output PWM":           {"en": "Output PWM",            "de": "Output PWM",                 "ru": "Циф. выход PWM"},
+        "ADC":                  {"en": "Analog in (ADC)",       "de": "Analog in (ADC)",            "ru": "Ан. вход (ADC)"},
+        "WS281x":               {"en": "WS281x",                "de": "WS281x",                     "ru": "WS281x"},
+        "Digital Sensor":       {"en": "Digital Sensor",        "de": "Digital Sensor",             "ru": "Циф. датчик"},
+        "normal opened":        {"en": "normal opened",         "de": "bei schliessen",             "ru": "при замыкании"},
+        "on change":            {"en": "on change",             "de": "auf änderung",               "ru": "при изменении"},
+        "normal closed":        {"en": "normal closed",         "de": "bei auf",                    "ru": "при размыкании"},
+        "modifier":             {"en": "modifier",              "de": "modifier",                   "ru": "модификатор"},
+        "Action:":              {"en": "Action:",               "de": "Aktion:",                    "ru": "Сценарий:"},
+        "Net:":                 {"en": "Net:",                  "de": "Net:",                       "ru": "Сетевой сценарий:"},
+        "Long:":                {"en": "Long:",                 "de": "Lang-Click:",                "ru": "Долгое нажатие:"},
+        "Double:":              {"en": "Double:",               "de": "Double-Click:",              "ru": "Двойное нажатие:"},
+        "not monitored":        {"en": "not monitored",         "de": "nicht beobachtet",           "ru": "не наблюдать"},
+        "> threshold":          {"en": "> threshold",           "de": "> Schwellwert",              "ru": "> порога"},
+        "< threshold":          {"en": "< threshold",           "de": "< Schwellwert",              "ru": "< порога"},
+        "<> threshold":         {"en": "<> threshold",          "de": "<> Schwellwert",             "ru": "<> порога"},
+        "T > threshold":        {"en": "T > threshold",         "de": "T > Schwellwert",            "ru": "T > порога"},
+        "T < threshold":        {"en": "T < threshold",         "de": "T < Schwellwert",            "ru": "T < порога"},
+        "T <> threshold":       {"en": "T <> threshold",        "de": "T <> Schwellwert",           "ru": "T <> порога"},
+        "H > threshold":        {"en": "H > threshold",         "de": "H > Schwellwert",            "ru": "H > порога"},
+        "H < threshold":        {"en": "H < threshold",         "de": "H < Schwellwert",            "ru": "H < порога"},
+        "H <> threshold":       {"en": "H <> threshold",        "de": "H <> Schwellwert",           "ru": "H <> порога"},
+        ///"TR:":                  {"en": "TR:",                   "de": "TR:",                        "ru": "TR:"},
+        ///"Act:":                 {"en": "Act:",                  "de": "Act:",                       "ru": "Act:"},
+        ///"Net:":                 {"en": "Net:",                  "de": "Net:",                       "ru": "Net:"},
+        ///"Net&Act:":             {"en": "Net&Act:",              "de": "Net&Act:"                    "ru": "Net&Act:"},
+        ///"Net>Act:":             {"en": "Net>Act:",              "de": "Net>Act:",                   "ru": "Net>Act:"},
+        "Offset:":              {"en": "Offset:",               "de": "Offset:",                    "ru": "Сдвиг:"},
+        "Factor:":              {"en": "Factor:",               "de": "Faktor:",                    "ru": "Множитель:"},
+        "Period:":              {"en": "Period:",               "de": "Period:",                    "ru": "Период:"}, 
+        "DHT11":                {"en": "DHT11",                 "de": "DHT11",                      "ru": "DHT11"},
+        "DHT22":                {"en": "DHT22",                 "de": "DHT22",                      "ru": "DHT22"},
+        "PWM":                  {"en": "PWM",                   "de": "PWM",                        "ru": "ШИМ"},
+        "Default state:":       {"en": "Default state:",        "de": "Default Zustand:",           "ru": "По умолчанию:"},
+        "off":                  {"en": "off",                   "de": "off",                        "ru": "выкл"},
+        "on":                   {"en": "on",                    "de": "on",                         "ru": "вкл"},
+        "Threshold:":           {"en": "Threshold:",            "de": "Schwellwert:",               "ru": "Порог:"},
+        "Change ip or password": {
+            "en": "Change ip or password",
+            "de": "IP Adresse oder Kennwort ändern",
+            "ru": "Изменить IP или пароль"
+        },
+         "Take new settings into config:": {
+             "en": "Take new settings into config:",
+             "de": "Neue Einstellungen übernehmen:",
+             "ru": "Перенять новые настройки:"
+         },
+         "Old IP:":             {"en": "Old IP:",               "de": "Alte IP:",                   "ru": "Старый IP:"},
+         "Old password:":       {"en": "Old password:",         "de": "Altes Kennwort:",            "ru": "Старый пароль:"},
+         "New IP:":             {"en": "New IP:",               "de": "Neue IP:",                   "ru": "Новый IP:"},
+         "New password:":       {"en": "New password:",         "de": "Neues Kennwort:",            "ru": "Новый пароль:"},
+         "Set new password or IP address": {
+             "en": "Set new password or IP address",
+             "de": "Set new password or IP address",
+             "ru": "Изменить IP или пароль на устройстве"
+         },
+        "Ok":                   {"en": "Ok",                    "de": "Ok",                         "ru": "Ok"},
+        "Cancel":               {"en": "Cancel",                "de": "Abrechen",                   "ru": "Отмена"},
+        "Error":                {"en": "Error",                 "de": "Fehler",                     "ru": "Ошибка"},
+        "Find devices":         {"en": "Find devices",          "de": "Suche Geräte",               "ru": "Искать устройства"},
+        "Internal Sensor":      {"en": "Internal Sensor",       "de": "Eingebauter Sensor",         "ru": "Internal Sensor"},
+        "PWM:":                 {"en": "PWM:",                  "de": "PWM:",                       "ru": "PWM:"},
+        "Sensor type:":         {"en": "Sensor type:",          "de": "Sensortyp:",                 "ru": "Тип сенсора:"},
+        "De-bounce:":           {"en": "De-bounce:",            "de": "Entprellen:",                "ru": "Дребезг:"}
+    };
+    var onchange = null;
+    var rooms    = [];
+    var ports    = [];
+    var active   = false;
+
+    function showOnePort(index, portSettings) {
+        // name, room, role, pty(type), acm(Action), ecm(net action), m(mode), d(default state), pwm(0-255), misc (threshold)
+        var text = '<tr class="tspace">';
+        // index
+        ///text += '<td class="tspace">' + ((index == 14 || index == 15) ? ('A' + (index - 8)) : ('P' + index)) + '</td>';
+        text += '<td class="tspace">' + ((index == 9) ? ('P' + index) : ('P' + index)) + '</td>';
+        // name
+        text += '<td class="tspace"><input class="tvalue" type="text" data-type="name" data-port="' + index + '" value="' + (portSettings.name || '') + '" style="width: 100%"/></td>';
+
+        // room
+        text += '<td class="tspace"><select class="tvalue" data-type="room" data-port="' + index + '" style="width: 100%"><option value=""></option>';
+
+        for (var r in rooms) {
+            text += '<option value="' + r + '" ' + ((portSettings.room == r) ? 'selected' : '') + '>' + rooms[r].common.name + '</option>';
+        }
+        '</td>';
+
+        // role
+        text += '<td class="tspace"><input class="tvalue" type="text"  data-type="role" data-port="' + index + '" value="' + (portSettings.role || '') + '" style="width: 100%"/></td>';
+
+        // type
+        ///text += '<td class="tspace"><select class="tvalue" ' + (((index == 14 || index == 15) && portSettings.pty == 2) ? 'disabled' : '') + ' data-type="pty" data-port="' + index + '" style="width: 100%">';
+        text += '<td class="tspace"><select class="tvalue" ' + ((index == 9 && portSettings.pty == 2) ? 'disabled' : '') + ' data-type="pty" data-port="' + index + '" style="width: 100%">';
+        text += '<option value="255" ' + ((portSettings.pty == 255) ? 'selected' : '') + '>' + _('NC')              + '</option>';
+        text += '<option value="0" '   + ((portSettings.pty == 0)   ? 'selected' : '') + '>' + _('Input')           + '</option>';
+        ///text += '<option value="1" '   + ((portSettings.pty == 1)   ? 'selected' : '') + '>' + _('Output')          + '</option>';
+        text += '<option value="1" '   + ((portSettings.pty == 1)   ? 'selected' : '') + '>' + _('Output SW')       + '</option>';
+        text += '<option value="8" '   + ((portSettings.pty == 8)   ? 'selected' : '') + '>' + _('Output SL')       + '</option>';
+        text += '<option value="4" '   + ((portSettings.pty == 4)   ? 'selected' : '') + '>' + _('Output PWM')      + '</option>';
+        ///text += '<option value="2" '   + ((portSettings.pty == 2)   ? 'selected' : '') + '>' + _('ADC')             + '</option>';
+        if (index == 0 || index == 1 || index == 3 || index == 4 || index == 5 || index == 7 || index == 8) {
+        text += '<option value="3" '   + ((portSettings.pty == 3)   ? 'selected' : '') + '>' + _('Digital Sensor')  + '</option>';
+        }
+        if (index == 9) {
+        text += '<option value="2" '   + ((portSettings.pty == 2)   ? 'selected' : '') + '>' + _('ADC')             + '</option>';
+        }
+        text += '<option value="5" '   + ((portSettings.pty == 5)   ? 'selected' : '') + '>' + _('WS281x')          + '</option>';
+        if (index == 7) {
+            text += '<option value="6" '   + ((portSettings.pty == 6)   ? 'selected' : '') + '>' + _('I2C_SDA')          + '</option>';
+        }
+        if (index == 8) {
+            text += '<option value="7" '   + ((portSettings.pty == 7)   ? 'selected' : '') + '>' + _('I2C_SCL')          + '</option>';
+        }
+        ///text += '<option value="4" '   + ((portSettings.pty == 4)   ? 'selected' : '') + '>' + _('Internal Sensor') + '</option>';
+        '</td>';
+
+        // mode
+        var modes = null;
+        if (portSettings.pty == 0) {
+            modes = [
+                'normal opened',
+                'on change',
+                'normal closed',
+                'modifier'
+            ];
+        } else if (portSettings.pty == 1) {
+            if (index == 0 || index == 1 || index == 2 || index == 3 || index == 4 || index == 5 || index == 6 || index == 7 || index == 8) {
+                ///modes = [
+                    ///'switch',
+                    ///'PWM'
+                ///];
+            ///} else {
+                modes = [
+                    'switch'
+                ];
+            }
+
+        ///} else if (portSettings.pty == 2 || (portSettings.pty == 3 && portSettings.d == 3)) {
+        } else if (portSettings.pty == 2) {
+            modes = [
+                'not monitored',
+                '> threshold',
+                '< threshold',
+                '<> threshold'
+            ];
+        } else if (portSettings.pty == 3 && portSettings.d == 3) {
+            modes = [
+                'not monitored',
+                'T > threshold',
+                'T < threshold',
+                'T <> threshold'
+            ];
+        } else if (portSettings.pty == 3 && (portSettings.d == 1 || portSettings.d == 2)) {
+            modes = [
+                'not monitored',
+                'T > threshold',
+                'T < threshold',
+                'T <> threshold',
+                'H > threshold',
+                'H < threshold',
+                'H <> threshold'
+            ];
+        }
+        if (modes) {
+            text += '<td class="tspace"><select class="tvalue" data-type="m" data-port="' + index + '">';
+
+            for (var m = 0; m < modes.length; m++) {
+                text += '<option value="' + m + '" ' + ((portSettings.m == m) ? 'selected' : '') + '>' + _(modes[m]) + '</option>';
+            }
+            text += '</select</td>';
+        } else {
+            text += '<td class="tspace"></td>';
+        }
+        // buttons
+        text += '<td class="tspace"><table class="no-space"><tr class="no-space">';
+        text += '<td class="no-space"><button data-port="' + index + '" class="btn-delete"></button></td>';
+        text += index ? '<td class="no-space"><button data-port="' + index + '" class="btn-up"></button></td>' : '<td class="no-space"><div style="width: 24px"> </div></td>';
+        text += (index != ports.length - 1) ? '<td class="no-space"><button data-port="' + index + '" class="btn-down"></button></td>' : '<td class="no-space"></td>';
+
+        text += '</tr></table></td>';
+
+
+        text += '<td class="tspace">';
+
+        // acm(Action) and ecm(net action)
+        if (portSettings.pty == 0 || portSettings.pty == 2 || (portSettings.pty == 3 && (portSettings.d != 1 || portSettings.d != 2 || portSettings.d != 3))) {
+            // acm(Action)
+            ///text += _('Action:') + ' <input class="tvalue" data-type="acm" type="text" data-port="' + index + '" value="' + (portSettings.acm || '') + '"  style="width: 70px" maxsize="11"/>';
+            text += _('Action:') + ' <input class="tvalue" data-type="acm" type="text" data-port="' + index + '" value="' + (portSettings.acm || '') + '"  style="width: 70px" maxsize="18"/>';
+            // tr
+            ////text += _(' | ') + ' <input class="tvalue" data-type="tr" type="text" data-port="' + index + '" value="' + (portSettings.tr || '') + '"  style="width: 24px" maxsize="18"/>';
+            // ecm(net action)
+            text += _('Net:') + ' <input class="tvalue" data-type="ecm" type="text" data-port="' + index + '" value="' + portSettings.ecm  + '" style="width: 70px" maxsize="35"/>';
+        }
+
+        //d(default state)
+        /*if (portSettings.pty == 1) {
+            if (portSettings.m) {
+                portSettings.d = 0;
+            } else {
+                text += _('Default state:') + ' <select class="tvalue" data-type="d" data-port="' + index + '">';
+                text += '<option value="0" ' + ((portSettings.d == 0) ? 'selected' : '') + '>' + _('off') + '</option>';
+                text += '<option value="1" ' + ((portSettings.d == 1) ? 'selected' : '') + '>' + _('on') + '</option>';
+                text += '</select>';
+            }
+        ///} else if (portSettings.pty == 0) {
+            ///text += _('De-bounce:') + ' <input type="checkbox" class="tvalue" data-type="d" data-port="' + index + '"/>';
+        }*/
+        if (portSettings.pty == 1) {
+            text += _('Default state:') + ' <select class="tvalue" data-type="d" data-port="' + index + '">';
+            text += '<option value="0" ' + ((portSettings.d == 0) ? 'selected' : '') + '>' + _('off') + '</option>';
+            text += '<option value="1" ' + ((portSettings.d == 1) ? 'selected' : '') + '>' + _('on') + '</option>';
+            text += '</select>';
+        }
+        if (portSettings.pty == 4) {
+            ////text += _('Default state:') + ' <input class="tvalue" data-type="d" type="text"  style="width: 70px" data-port="' + index + '" value="' + (portSettings.d || 0) + '" maxsize="3"/>';
+            text += _('Default state:') + ' <input class="tvalue" data-type="d" type="text" data-port="' + index + '" value="' + (portSettings.d || 0) + '" size=4 maxsize="3"/>';
+            ////////text += _('Default state:') + ' <input class="tvalue" data-type="d" type="text"  style="width: 50px" data-port="' + index + '" value="' + (portSettings.d || 0) + '" maxsize="3"/>';
+        }
+
+        //Sensor type
+        if (portSettings.pty == 3) {
+            modes = [
+                'none',
+                'DHT11',
+                'DHT22',
+                '1W'
+                ///'iB'
+            ];
+            text += _('Sensor type:') + ' <select class="tvalue" data-type="d" data-port="' + index + '">';
+            text += '<option value="0" ' + ((portSettings.d == 0) ? 'selected' : '') + '>' + _('none') + '</option>';
+            text += '<option value="1" ' + ((portSettings.d == 1) ? 'selected' : '') + '>DHT11</option>';
+            text += '<option value="2" ' + ((portSettings.d == 2) ? 'selected' : '') + '>DHT22</option>';
+            text += '<option value="3" ' + ((portSettings.d == 3) ? 'selected' : '') + '>1 wire</option>';
+            ///text += '<option value="4" ' + ((portSettings.d == 4) ? 'selected' : '') + '>iButton</option>';
+            text += '</select>';
+        }
+        //pwm
+        ///if (portSettings.pty == 1 && portSettings.m == 1 && (index == 10 || index == 12 || index == 13)) {
+        if (portSettings.pty == 4) {
+            text += _('PWM:') + ' <input class="tvalue" data-type="pwm" type="text" data-port="' + index + '" value="' + (portSettings.pwm || 0) + '" size=4 maxsize="3"/>';
+        }
+
+        //tr
+        if (portSettings.pty == 0 || portSettings.pty == 2 || portSettings.pty == 3) {
+            /*modes = [
+                'not monitored',
+                'Act',
+                'Net',
+                'Net&Act',
+                'Net>Act'
+            ];*/
+            text += _('TR:') + ' <select class="tvalue" data-type="tr" data-port="' + index + '">';
+            text += '<option value="0" ' + ((portSettings.tr == 0) ? 'selected' : '') + '>' + _('not monitored') + '</option>';
+            text += '<option value="1" ' + ((portSettings.tr == 1) ? 'selected' : '') + '>Act</option>';
+            text += '<option value="2" ' + ((portSettings.tr == 2) ? 'selected' : '') + '>Net</option>';
+            text += '<option value="3" ' + ((portSettings.tr == 3) ? 'selected' : '') + '>Net&Act</option>';
+            text += '<option value="4" ' + ((portSettings.tr == 4) ? 'selected' : '') + '>Net>Act</option>';
+            text += '</select>';
+        }
+
+        if (portSettings.pty == 5) {
+            ////text += _('R:') + ' <input class="tvalue" data-type="r" type="text"  style="width: 70px" data-port="' + index + '" value="' + (portSettings.r || '') + '" maxsize="3"/>';
+            ////text += _('G:') + ' <input class="tvalue" data-type="g" type="text"  style="width: 70px" data-port="' + index + '" value="' + (portSettings.g || '') + '" maxsize="3"/>';
+            ////text += _('B:') + ' <input class="tvalue" data-type="b" type="text"  style="width: 70px" data-port="' + index + '" value="' + (portSettings.b || '') + '" maxsize="3"/>';
+            text += _('Count:') + ' <input class="tvalue" data-type="pix" type="text"  style="width: 70px" data-port="' + index + '" value="' + (portSettings.pix || 0) + '" maxsize="3"/>';
+        }
+
+        if (portSettings.pty == 8) {
+            text += _('Mast:') + ' <select class="tvalue" data-type="d" data-port="' + index + '">';
+            text += '<option value="255" ' + ((portSettings.d == 255) ? 'selected' : '') + '>' + _('NC') + '</option>';
+            text += '<option value="1" ' + ((portSettings.d == 1) ? 'selected' : '') + '>P-4</option>';
+            text += '</select>';
+        }
+        if (portSettings.pty == 8) {
+            text += _('Mod:') + ' <select class="tvalue" data-type="m" data-port="' + index + '">';
+            text += '<option value="0" ' + ((portSettings.m == 0) ? 'selected' : '') + '>' + _('Same') + '</option>';
+            text += '<option value="1" ' + ((portSettings.m == 1) ? 'selected' : '') + '>Invert</option>';
+            text += '<option value="2" ' + ((portSettings.m == 2) ? 'selected' : '') + '>Flicker</option>';
+            text += '<option value="3" ' + ((portSettings.m == 3) ? 'selected' : '') + '>Pulse</option>';
+            text += '</select>';
+        }        
+
+        //misc and adc(misc)
+        ///if ((portSettings.pty == 2 && portSettings.m != 0) || (portSettings.pty == 3 && portSettings.d == 3)) {
+        ////if ((portSettings.pty == 2 && portSettings.m != 0) || (portSettings.pty == 3 && (portSettings.d != 1 || portSettings.d != 2 || portSettings.d != 3))) {
+        if (portSettings.pty == 3 && portSettings.d != 0 && portSettings.m != 0) {     
+            text += _('Threshold:') + ' <input class="tvalue" data-type="misc" type="text"  style="width: 70px" data-port="' + index + '" value="' + (portSettings.misc || 0) + '" maxsize="3"/>';
+        }
+        if (portSettings.pty == 2 && portSettings.m != 0) {
+        ////if (portSettings.pty == 2 && portSettings.m) {
+            text += _('Threshold:') + ' <input class="tvalue" data-type="adc" type="text"  style="width: 70px" data-port="' + index + '" value="' + (portSettings.adc || 0) + '" maxsize="3"/>';
+        }
+
+        ///if (portSettings.pty == 2 || (portSettings.pty == 1 && portSettings.m)) {
+        if (portSettings.pty == 2 || portSettings.pty == 4) {
+            text += _('Offset:') + ' <input class="tvalue" data-type="offset" type="text" data-port="' + index + '" style="width: 30px" value="' + (portSettings.offset || 0) + '"/>';
+            text += _('Factor:') + ' <input class="tvalue" data-type="factor" type="text" data-port="' + index + '" style="width: 30px" value="' + (portSettings.factor || 1) + '"/>';
+        }
+        if (portSettings.pty == 2) {     
+            ////text += _('Period:') + ' <input class="tvalue" data-type="d" type="text" data-port="' + index + '" style="width: 50px" value="' + (portSettings.d || 255) + '"/>' + _(' * 0,1s');
+            text += _('Period:') + ' <input class="tvalue" data-type="d" type="text"  style="width: 50px" data-port="' + index + '" value="' + (portSettings.d || 0) + '" maxsize="3"/>' + _(' * 0,1s');
+            ////text += _('Period:') + ' <input class="tvalue" data-type="d" type="text" data-port="' + index + '" value="' + (portSettings.d || 0) + '" size=4 maxsize="3"/>' + _(' * 0,1s');;
+        }
+
+        if (portSettings.pty == 0) {
+            if (portSettings.m == 1) {
+                text += ', ' + _('Long:')   + ' <input type="checkbox" class="tvalue" data-type="long" data-port="' + index + '" ' + (portSettings.long   ? 'checked' : '') + '/>, ';
+            }
+            text +=        _('Double:') + ' <input type="checkbox" class="tvalue" data-type="double" data-port="' + index + '" ' + (portSettings.double ? 'checked' : '') + '/>';
+        }
+        text += '</td>';
+
+        text += '</tr>';
+        return text;
+    }
+
+    function valueChanged() {
+        var attr  = $(this).data('type');
+        var index = $(this).data('port');
+
+        if ($(this).attr('type') == 'checkbox') {
+            ports[index][attr] = $(this).prop('checked');
+        } else {
+            ports[index][attr] = $(this).val();
+        }
+
+        if (attr == 'm' || attr == 'pty' || attr == 'd') {
+            // if input
+            if (ports[index].pty == 0) {
+                // m: 0 - on close, 1 - on change, 2 - on open
+                if (ports[index].factor !== undefined) delete ports[index].factor;
+                if (ports[index].offset !== undefined) delete ports[index].offset;
+                if (ports[index].long   === undefined) ports[index].long   = true;
+                if (ports[index].double === undefined) ports[index].double = true;
+
+                if (ports[index].ecm    === undefined) ports[index].ecm = '';
+                if (ports[index].acm    === undefined) ports[index].acm = '';
+                ///if (ports[index].d      === undefined) ports[index].d = 0;
+                if (ports[index].tr     === undefined) ports[index].tr = 0;
+                ///if (ports[index].misc   === undefined) ports[index].misc = 1;
+                if (ports[index].m      === undefined) ports[index].m = 0;
+                ///if (ports[index].m > 2) ports[index].m = 0;
+                if (ports[index].m > 3) ports[index].m = 0;       ////as dadejau
+
+                if (ports[index].m != 1) ports[index].long = false;
+            } else
+            if (ports[index].pty == 1) {
+                if (ports[index].factor !== undefined) delete ports[index].factor;
+                if (ports[index].offset !== undefined) delete ports[index].offset;
+                if (ports[index].long   !== undefined) delete ports[index].long;
+                if (ports[index].double !== undefined) delete ports[index].double;
+
+                if (ports[index].ecm    !== undefined) delete ports[index].ecm;
+                if (ports[index].acm    !== undefined) delete ports[index].acm;
+                if (ports[index].d      === undefined) ports[index].d = 0;
+                if (ports[index].misc   !== undefined) delete ports[index].misc;
+                ///if (ports[index].m      === undefined) ports[index].m = 0;
+                ///if (ports[index].m > 1) ports[index].m = 0;
+            } else
+            if (ports[index].pty == 2) {
+                if (ports[index].factor === undefined) ports[index].factor = 1;
+                if (ports[index].offset === undefined) ports[index].offset = 0;
+                if (ports[index].long   !== undefined) delete ports[index].long;
+                if (ports[index].double !== undefined) delete ports[index].double;
+
+                if (ports[index].ecm    === undefined) ports[index].ecm  = '';
+                if (ports[index].acm    === undefined) ports[index].acm  = '';
+                ///if (ports[index].d      !== undefined) delete ports[index].d;
+                if (ports[index].d      === undefined) ports[index].d = 0;
+                ///if (ports[index].misc   === undefined) ports[index].misc = 0;
+                if (ports[index].adc    === undefined) ports[index].adc  = 0;
+                if (ports[index].tr     === undefined) ports[index].tr  = '';
+                ///if (ports[index].m      === undefined) ports[index].m = 0;
+                if (ports[index].m      === undefined) ports[index].m = '';
+            } else
+            if (ports[index].pty == 3) {
+                if (ports[index].factor !== undefined) delete ports[index].factor;
+                if (ports[index].offset !== undefined) delete ports[index].offset;
+                if (ports[index].long   !== undefined) delete ports[index].long;
+                if (ports[index].double !== undefined) delete ports[index].double;
+
+                if (ports[index].ecm    === undefined) ports[index].ecm  = '';
+                if (ports[index].acm    === undefined) ports[index].acm  = '';
+                if (ports[index].tr     === undefined) ports[index].tr  = 0;
+                ///if (ports[index].d      === undefined) ports[index].d = 1;
+                if (ports[index].d      === undefined) ports[index].d = '';
+                /*if (ports[index].d != 3) {
+                    ports[index].misc = 0;
+                    ports[index].m    = 0;
+                } else {
+                    if (ports[index].misc   === undefined) ports[index].misc = 0;
+                    if (ports[index].m      === undefined) ports[index].m = 0;
+                }*/
+                ///if (ports[index].m > 3) ports[index].m = 0;
+                if (ports[index].m      === undefined) ports[index].m = 0;    ////DABAR
+            } else
+            if (ports[index].pty == 4) {
+                if (ports[index].factor !== undefined) delete ports[index].factor;
+                if (ports[index].offset !== undefined) delete ports[index].offset;
+                if (ports[index].long   !== undefined) delete ports[index].long;
+                if (ports[index].double !== undefined) delete ports[index].double;
+
+                if (ports[index].ecm    !== undefined) delete ports[index].ecm;
+                if (ports[index].acm    !== undefined) delete ports[index].acm;
+                if (ports[index].d      === undefined) ports[index].d = 0;
+                ////if (ports[index].pwm    === undefined) ports[index].pwm = 0;    /////ne esu tikras kad nereikia
+                ////if (ports[index].misc   !== undefined) delete ports[index].misc;
+                ////if (ports[index].m      === undefined) ports[index].m = 0;
+                ////if (ports[index].m > 1) ports[index].m = 0;
+            } else
+            if (ports[index].pty == 5) {
+                if (ports[index].factor !== undefined) delete ports[index].factor;
+                if (ports[index].offset !== undefined) delete ports[index].offset;
+                if (ports[index].long   !== undefined) delete ports[index].long;
+                if (ports[index].double !== undefined) delete ports[index].double;
+
+                if (ports[index].ecm    !== undefined) delete ports[index].ecm;
+                if (ports[index].acm    !== undefined) delete ports[index].acm;
+                if (ports[index].pix    === undefined) ports[index].pix = 0;
+                ////if (ports[index].r      === undefined) ports[index].r = '';
+                ////if (ports[index].g      === undefined) ports[index].g = '';
+                ////if (ports[index].b      === undefined) ports[index].b = '';
+            } else
+            if (ports[index].pty == 6) {
+                if (ports[index].factor !== undefined) delete ports[index].factor;
+                if (ports[index].offset !== undefined) delete ports[index].offset;
+                if (ports[index].long   !== undefined) delete ports[index].long;
+                if (ports[index].double !== undefined) delete ports[index].double;
+
+                if (ports[index].ecm    !== undefined) delete ports[index].ecm;
+                if (ports[index].acm    !== undefined) delete ports[index].acm;
+                ////if (ports[index].d      === undefined) ports[index].d = 0;
+                if (ports[index].misc   !== undefined) delete ports[index].misc;
+                ////if (ports[index].m      === undefined) ports[index].m = 0;
+                ////if (ports[index].m > 1) ports[index].m = 0;
+            } else
+            if (ports[index].pty == 7) {
+                if (ports[index].factor !== undefined) delete ports[index].factor;
+                if (ports[index].offset !== undefined) delete ports[index].offset;
+                if (ports[index].long   !== undefined) delete ports[index].long;
+                if (ports[index].double !== undefined) delete ports[index].double;
+
+                if (ports[index].ecm    !== undefined) delete ports[index].ecm;
+                if (ports[index].acm    !== undefined) delete ports[index].acm;
+                ////if (ports[index].d      === undefined) ports[index].d = 0;
+                if (ports[index].misc   !== undefined) delete ports[index].misc;
+                ////if (ports[index].m      === undefined) ports[index].m = 0;
+                ////if (ports[index].m > 1) ports[index].m = 0;
+            } else
+            if (ports[index].pty == 8) {
+                if (ports[index].factor !== undefined) delete ports[index].factor;
+                if (ports[index].offset !== undefined) delete ports[index].offset;
+                if (ports[index].long   !== undefined) delete ports[index].long;
+                if (ports[index].double !== undefined) delete ports[index].double;
+
+                if (ports[index].ecm    !== undefined) delete ports[index].ecm;
+                if (ports[index].acm    !== undefined) delete ports[index].acm;
+                if (ports[index].d      === undefined) ports[index].d = 0;
+                ////if (ports[index].misc   !== undefined) delete ports[index].misc;
+                if (ports[index].m      === undefined) ports[index].m = 0;
+                ////if (ports[index].m > 1) ports[index].m = 0;
+            } else {
+                if (ports[index].factor !== undefined) delete ports[index].factor;
+                if (ports[index].offset !== undefined) delete ports[index].offset;
+                if (ports[index].long   !== undefined) delete ports[index].long;
+                if (ports[index].double !== undefined) delete ports[index].double;
+
+                if (ports[index].ecm    !== undefined) delete ports[index].ecm;
+                if (ports[index].acm    !== undefined) delete ports[index].acm;
+                if (ports[index].d      !== undefined) delete ports[index].d;
+                if (ports[index].misc   !== undefined) delete ports[index].misc;
+                if (ports[index].m      !== undefined) delete ports[index].m;
+                if (ports[index].tr     !== undefined) delete ports[index].tr;
+                if (ports[index].pix    !== undefined) delete ports[index].pix;
+                if (ports[index].adc    !== undefined) delete ports[index].adc;
+            }
+
+            showPorts();
+        }
+        onchange();
+    }
+
+    function onDelete() {
+        var index = $(this).data('port');
+        ports.splice(index, 1);
+        onchange();
+        showPorts();
+    }
+
+    function onUp() {
+        var index = $(this).data('port');
+        var tmp = ports[index - 1];
+        ports[index - 1] = ports[index];
+        ports[index] = tmp;
+        onchange();
+        showPorts();
+    }
+
+    function onDown() {
+        var index = $(this).data('port');
+        var tmp = ports[index + 1];
+        ports[index + 1] = ports[index];
+        ports[index] = tmp;
+        onchange();
+        showPorts();
+    }
+
+    function showPorts() {
+        var text = '<table class="tspace">';
+        text += '<tr class="tspace ui-widget-header">';
+        text += '<th class="tspace"></th>';
+        // name, room, role, pty(type), acm(Action), ecm(net action), m(mode), d(default state), pwm(0-255), misc (threshold)
+        text += '<th class="tspace">' + _('Name') + '</th>';
+        text += '<th class="tspace">' + _('Room') + '</th>';
+        text += '<th class="tspace">' + _('Role') + '</th>';
+        text += '<th class="tspace">' + _('Type') + '</th>';
+        text += '<th class="tspace">' + _('Mode') + '</th>';
+        text += '<th class="tspace"></th>';
+        text += '<th class="tspace"></th>';
+        text += '</tr>';
+
+        for (var i = 0; i < ports.length; i++) {
+            text += showOnePort(i, ports[i]);
+        }
+        text += '</table>';
+        $('#ports').html(text);
+
+        $('.tvalue').each(function () {
+            if ($(this).attr('type') == 'text') {
+                $(this).keyup(function () {
+                    $(this).trigger('change');
+                });
+            }
+            $(this).change(valueChanged);
+        });
+
+        $('.btn-delete').button({
+            icons: {primary: 'ui-icon-trash'},
+            text:  false
+        }).css({width: 22, height: 22}).click(onDelete);
+        $('.btn-up').button({
+            icons: {primary: 'ui-icon-arrowthick-1-n'},
+            text:  false
+        }).css({width: 22, height: 22}).click(onUp);
+        $('.btn-down').button({
+            icons: {primary: 'ui-icon-arrowthick-1-s'},
+            text:  false
+        }).css({width: 22, height: 22}).click(onDown);
+
+    }
+
+    function readRooms() {
+        getEnums('rooms', function (err, _rooms) {
+            rooms = _rooms;
+            showPorts();
+        });
+    }
+
+    // the function loadSettings has to exist ...
+    function load(settings, onChange) {
+        if (!settings) return;
+
+        if (settings.longPress === undefined) settings.longPress = 400;
+
+        $('.value').each(function () {
+            var key = $(this).attr('id');
+            // example: select elements with id=key and class=value and insert value
+            if ($(this).attr('type') == 'checkbox') {
+                $(this).prop('checked', settings[key]).change(function() {
+                    if ($('#auth').prop('checked')) {
+                        $('#secure').prop('checked', true);
+                    }
+                    onChange();
+                });
+            } else {
+                if (settings[key] === undefined) settings[key] = '';
+
+                $(this).val(settings[key]).change(function() {
+                    onChange();
+                }).keyup(function() {
+                    onChange();
+                });
+            }
+        });
+
+        ports = settings.ports || [];
+
+        $('#autoDetect').button({
+            icons: {primary: 'ui-icon-refresh'}
+        }).click(function() {
+            autoDetect($('#ip').val(), $('#password').val());
+        });
+
+        $('#write').button({
+            icons: {primary: 'ui-icon-disk'}
+        }).click(function() {
+            var port = $('#port').val();
+            port = parseInt(port, 10);
+            if (!port || port == 80) {
+                port = '';
+            }
+            writeConfig($('#ip').val(), $('#password').val(), port, ports);
+        });
+
+        onchange = onChange;
+
+        readRooms();
+
+        // read if instance is active or enabled
+        socket.emit('getState', 'system.adapter.' + adapter + '.' + instance + '.alive', function (err, state) {
+            active = common.enabled || (state && state.val);
+        });
+        
+        $('#add').button({
+            icons: {primary: 'ui-icon-plusthick'}
+        }).click(function () {
+            ///if (ports.length == 14 || ports.length == 15) {
+            if (ports.length == 9) {
+                ports.push({
+                    pty:    2,
+                    ///name:   'A' + (ports.length - 8),
+                    name:   'P' + ports.length,
+                    acm:    '',
+                    ecm:    '',
+                    m:      0,
+                    factor: 1,
+                    offset: 0,
+
+                    role:   'state',
+                    room:   ''
+                });
+            } else {
+                ports.push({
+                    pty:    0,
+                    name:   ('P' + ports.length),
+                    acm:    '',
+                    ecm:    '',
+                    m:      0,
+
+                    long:   false,
+                    double: false,
+                    role:   'state',
+                    room:   ''
+                });
+            }
+            onchange();
+
+            showPorts();
+        });
+
+        $('#ipchange').button({
+            icons: {primary: 'ui-icon-note'}
+        }).click(function () {
+            $('#change_old_ip').val($('#ip').val());
+            $('#change_old_password').val($('#password').val());
+            $('#change_new_ip').val($('#ip').val());
+            $('#change_new_password').val($('#password').val());
+
+            $('#change-dialog').dialog( {
+                autoOpen: true,
+                modal:    true,
+                width:    460,
+                height:   270,
+                title:    _('Set new password or IP address'),
+                buttons: [
+                    {
+                        text: _('Ok'),
+                        click: function () {
+                            $(this).dialog("close");
+                            var config = {};
+                            var changed = false;
+                            if ($('#change_old_ip').val() != $('#change_new_ip').val()) {
+                                config.eip = $('#change_new_ip').val();
+                                changed = true;
+                            }
+                            if ($('#change_new_password').val() != $('#change_old_password').val()) {
+                                config.pwd = $('#change_new_password').val();
+                                changed = true;
+                            }
+                            if (changed) {
+                                writeConfig(
+                                    $('#change_old_ip').val(),
+                                    $('#change_old_password').val(),
+                                    undefined, undefined,
+                                    config.eip,
+                                    config.pwd,
+                                    function (err) {
+                                        if (err && err.length) {
+                                            showMessage(err[err.length - 1], _('Error'), 'alert');
+                                        } else {
+                                            showMessage(_('OK'), _('Info'), 'info');
+                                            if ($('#change_take').prop('checked')) {
+                                                if ($('#change_old_ip').val() != $('#change_new_ip').val()) {
+                                                    $('#ip').val($('#change_new_ip').val()).trigger('change');
+                                                }
+                                                if ($('#change_old_password').val() != $('#change_new_password').val()) {
+                                                    $('#password').val($('#change_new_password').val()).trigger('change');
+                                                }
+                                            }
+                                        }
+                                });
+                            } else {
+                                showMessage(_('Nothing changed'), 'Info', 'info');
+                            }
+                        }
+                    },
+                    {
+                        text: _('Cancel'),
+                        click: function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                ]
+            });
+        });
+
+        $('#ip').change(function () {
+            var val = $(this).val();
+            if (!val || val == '0.0.0.0') {
+                $('#autoDetect').button('disable');
+                $('#write').button('disable');
+                $('#ipchange').button('disable');
+            } else {
+                $('#autoDetect').button('enable');
+                $('#write').button('enable');
+                $('#ipchange').button('enable');
+            }
+        }).keyup(function () {
+            $(this).trigger('change');
+        }).trigger('change');
+
+        $('#discover').button({
+            icons: {primary: 'ui-icon-refresh'}
+        }).click(function () {
+            if (!active) {
+                showMessage(_('Enable adapter first'), 'Warning', 'info');
+                return;
+            }
+            $(this).button('disable');
+            sendTo(null, 'discover', null, function (msg) {
+                $('#discover').button('enable');
+                if (msg && msg.error) {
+                    showMessage(msg.error, _('Error'), 'alert');
+                } else if (msg && msg.devices) {
+                    if (!msg.devices.length) {
+                        showMessage(_('Nothing found'), _('Message'), 'alert');
+                    } else {
+                        var text = '<option value="">' + _('none') + '</option>';
+                        for (var d = 0; d < msg.devices.length; d++) {
+                            text += '<option value="' + msg.devices[d] + '">' + msg.devices[d] + '</option>';
+                        }
+                        $('#ips').show().html(text).attr('size', msg.devices.length > 4 ? 5 : msg.devices.length + 1);
+                    }
+                }
+            });
+        }).css({'font-size': '0.7em'});
+
+        $('#ips').change(function () {
+            $('#ip').val($(this).val()).trigger('change');
+        });
+
+        onChange(false);
+    }
+
+    // ... and the function save has to exist.
+    // you have to make sure the callback is called with the settings object as first param!
+    function save(callback) {
+        // example: select elements with class=value and build settings object
+        var obj = {};
+        $('.value').each(function () {
+            var $this = $(this);
+            if ($this.attr('type') == 'checkbox') {
+                obj[$this.attr('id')] = $this.prop('checked');
+            } else {
+                obj[$this.attr('id')] = $this.val();
+            }
+        });
+
+        // Get edited table
+        obj.ports = ports;
+
+        callback(obj);
+    }
+
+    function autoDetect(ip, pass) {
+        if (!active) {
+            showMessage(_('Enable adapter first'), 'Warning', 'info');
+            return;
+        }
+
+        if (window.confirm(_('Information will be merged. Are you sure?'))) {
+
+            $('#write').button('disable');
+            $('#autoDetect').button('disable');
+            $('#ipchange').button('disable');
+
+            sendTo(null, 'detectPorts', {ip: ip, password: pass}, function (msg) {
+
+                $('#write').button('enable');
+                $('#autoDetect').button('enable');
+                $('#ipchange').button('enable');
+
+                if (!msg || msg.error) {
+                    showMessage(msg.error, _('Error'), 'alert');
+                    return;
+                }
+                //OFF;OFF/0;OFF/0;25;temp:45.6;temp:45.6/hum:27
+                var _ports = msg.response ? msg.response.split(';') : [];
+                var settingsPorts =  msg.ports || [];
+                var aPorts = [];
+                for (var p = 0; p < _ports.length; p++) {
+                    aPorts[p] = settingsPorts[p] || {};
+
+                    if (aPorts[p].pn !== undefined) delete aPorts[p].pn;
+
+                    ports[p] = ports[p] || {};
+                    if (aPorts[p].pty == 0) {
+                        // input digital port
+                        aPorts[p].name    = ports[p].name  || ('P' + p);
+                        aPorts[p].acm     = aPorts[p].acm  || '';
+                        aPorts[p].ecm     = aPorts[p].ecm  || '';
+                        aPorts[p].m       = aPorts[p].m    || 0;
+                        ///aPorts[p].misc    = aPorts[p].misc || 0;
+                        aPorts[p].tr      = aPorts[p].tr   || 0;
+                        ///aPorts[p].d       = aPorts[p].d    || 0;
+                        // Данная галочка говорит нам, что: если сервер доступен то используется режим P&R. Если нет, то: mode P(0), act 7:2
+                        ///if (aPorts[p].misc) {
+                            ///aPorts[p].m = 1;
+                        ///}
+
+                        aPorts[p].long    = !!ports[p].long;
+                        aPorts[p].double  = !!ports[p].double;
+                        aPorts[p].role    = ports[p].role || 'state';
+                    } else
+                    if (aPorts[p].pty == 1) {
+                        // output digital port
+                        aPorts[p].name    = ports[p].name || ('P' + p);
+                        ///aPorts[p].m       = aPorts[p].m   || 0;
+                        aPorts[p].d       = aPorts[p].d   || 0;
+                        ///aPorts[p].pwm     = aPorts[p].pwm || 0;
+
+                        aPorts[p].role    = ports[p].role || 'button';
+                    } else
+                    if (aPorts[p].pty == 2) {
+                        // ADC port
+                        ///aPorts[p].name    = ports[p].name  || ((p == 14 || p == 15) ? ('A' + (p - 8)) : ('P' + p));
+                        aPorts[p].name    = ports[p].name  || ((p == 9) ? ('P' + p) : ('P' + p));
+                        aPorts[p].acm     = aPorts[p].acm  || '';
+                        aPorts[p].ecm     = aPorts[p].ecm  || '';
+                        aPorts[p].m       = aPorts[p].m    || 0;
+                        aPorts[p].tr      = aPorts[p].tr    || '';
+                        ///aPorts[p].misc    = aPorts[p].misc || 0;
+                        aPorts[p].adc     = aPorts[p].adc  || 0;
+
+                        aPorts[p].offset  = ports[p].offset || 0;
+                        aPorts[p].factor  = ports[p].factor || 1;
+                        aPorts[p].role    = ports[p].role   || 'value';
+                    } else
+                    if (aPorts[p].pty == 3) {
+                        // temperature - digital sensor
+                        aPorts[p].name    = ports[p].name || ('P' + p);
+                        ///aPorts[p].m       = aPorts[p].m || (_ports[p].indexOf('hum') != -1 ? 1 : 0);
+                        aPorts[p].m       = aPorts[p].m || 0;
+                        aPorts[p].d       = aPorts[p].d || 0;
+                        aPorts[p].role    = ports[p].role || 'value.temperature';
+                    ///} else if (_ports[p].indexOf('temp:') != -1) {
+                        // temperature - internal sensor
+                        ///aPorts[p].pty     = 4;
+                        ///aPorts[p].name    = ports[p].name || ('P' + p);
+                        ///aPorts[p].role    = ports[p].role || 'value.temperature';
+                    } else
+                    if (aPorts[p].pty == 4) {
+                        // output digital port
+                        aPorts[p].name    = ports[p].name || ('P' + p);
+                        ////aPorts[p].m       = aPorts[p].m   || 0;
+                        aPorts[p].d       = aPorts[p].d   || 0;
+                        aPorts[p].pwm     = aPorts[p].pwm || 0;
+                        aPorts[p].role    = ports[p].role || 'button';
+                    } else
+                    if (aPorts[p].pty == 5) {
+                        // output digital port
+                        aPorts[p].name    = ports[p].name || ('P' + p);
+                        ////aPorts[p].m       = aPorts[p].m   || 0;
+                        ////aPorts[p].d       = aPorts[p].d   || 0;
+                        
+                        aPorts[p].role    = ports[p].role || 'button';
+                    } else
+                    if (aPorts[p].pty == 6) {
+                        // output digital port
+                        aPorts[p].name    = ports[p].name || ('P' + p);
+                        ////aPorts[p].m       = aPorts[p].m   || 0;
+                        ////aPorts[p].d       = aPorts[p].d   || 0;
+
+                        aPorts[p].role    = ports[p].role || 'button';
+                    } else
+                    if (aPorts[p].pty == 7) {
+                        // output digital port
+                        aPorts[p].name    = ports[p].name || ('P' + p);
+                        ////aPorts[p].m       = aPorts[p].m   || 0;
+                        ////aPorts[p].d       = aPorts[p].d   || 0;
+
+                        aPorts[p].role    = ports[p].role || 'button';
+                    } else
+                    if (aPorts[p].pty == 8) {
+                        // output digital port
+                        aPorts[p].name    = ports[p].name || ('P' + p);
+                        aPorts[p].m       = aPorts[p].m   || 0;
+                        aPorts[p].d       = aPorts[p].d   || 0;
+                        
+                        aPorts[p].role    = ports[p].role || 'button';
+                    } else {
+                        // unknown settings
+                        aPorts[p].pty     = 255;
+                        aPorts[p].name    = ports[p].name || ('P' + p + ' - unknown');
+                    }
+                    aPorts[p].room  = ports[p].room || '';
+
+                }
+                ports = aPorts;
+
+                onchange();
+
+                showPorts();
+            });
+        }
+    }
+
+    function saveSettings() {
+        var id = 'system.adapter.' + adapter + '.' + instance;
+
+        var obj = {};
+        $('.value').each(function () {
+            var $this = $(this);
+            if ($this.attr('type') == 'checkbox') {
+                obj[$this.attr('id')] = $this.prop('checked');
+            } else {
+                obj[$this.attr('id')] = $this.val();
+            }
+        });
+
+        // Get edited table
+        obj.ports = ports;
+
+        socket.emit('getObject', id, function (err, oldObj) {
+            if (!oldObj) oldObj = {};
+
+            for (var a in obj) {
+                oldObj.native[a] = obj[a];
+            }
+
+            socket.emit('setObject', id, oldObj, function (err) {
+                if (err) {
+                    showMessage(err, _('Error'), 'alert');
+                    return;
+                }
+                changed = false;
+
+                $('#save').button('disable');
+                $('#saveclose').button('disable');
+                $('#close .ui-button-text').html(_('close'));
+            });
+        });
+    }
+
+    function writeConfig(ip, pass, port, ports, newIp, newPass, callback) {
+        if (!active) {
+            showMessage(_('Enable adapter first'), 'Warning', 'info');
+            return;
+        }
+        var config = {
+            //pwd: pass,  // to change password
+            //eip: ip,    // to change the IP address
+            port: port
+        };
+
+        if (newIp   != undefined) config.eip = newIp;
+        if (newPass != undefined) config.pwd = newPass;
+
+
+        $('#write').button('disable');
+        $('#autoDetect').button('disable');
+        $('#ipchange').button('disable');
+
+        sendTo(null, 'writeConfig', {ip: ip, password: pass, ports: ports, config: config}, function (msg) {
+
+            $('#write').button('enable');
+            $('#autoDetect').button('enable');
+            $('#ipchange').button('enable');
+
+            if (callback) return callback(msg ? msg.error : null);
+
+            var error = (msg && msg.error && msg.error.length) ? msg.error[msg.error.length - 1] : null;
+
+            if (!msg || error) {
+                showMessage(error, _('Error'), 'alert');
+                return;
+            } else {
+                showMessage(_('OK'), _('Success'), 'info');
+                if (changed) saveSettings();
+            }
+        });
+    }
+
+</script>
+
+<!-- you have to put your config page in a div with id adapter-container -->
+<div id="adapter-container">
+
+    <table><tr><td><img src="megad.png"></td><td><h3 class="translate">Mega-ESP adapter settings</h3></td></tr></table>
+
+    <table>
+        <tr><td class="translate" style="text-align: right">IP:</td><td>                    <input  class="value" id="ip"/></select></td>
+            <td style="padding-left: 10px"><select id="ips" style="display:none"></select>&nbsp;<button id="discover" class="translateB">Find devices</button></td></tr>
+        <tr><td class="translate" style="text-align: right">MegaESP Name:</td><td>          <input  class="value" id="name"/></td>
+            <td class="translate" style="text-align: right">Poll interval (sec):</td><td>   <input  class="value" id="pollInterval"  maxlength="3"/></td>
+        <tr><td class="translate" style="text-align: right">ioBroker Web Port:</td><td>     <input  class="value" id="port"          maxlength="5"/></td>
+            <td class="translate" style="text-align: right">Long press detect (ms):</td><td><input  class="value" id="longPress"     maxlength="4"/></td>
+        </tr>
+        <tr><td class="translate" style="text-align: right">MegaESP Password:</td><td>      <input  class="value" id="password"      maxlength="3"/></td>
+            <td class="translate" style="text-align: right">Double press detect (ms):</td><td><input  class="value" id="doublePress" maxlength="4"/></td>
+        </tr>
+    </table>
+    <button class="translate" id="add">Add new port</button>
+    <button class="translate" id="autoDetect">Auto detect ports</button>
+    <button class="translate" id="write">Write config to device</button>
+    <button class="translate" id="ipchange">Change ip or password</button>
+    <table>
+        <thead>
+        <col width="20px" />
+        <col width="100px" />
+        <col width="100px" />
+        <col width="100px" />
+        <col width="110px" />
+        <col width="100px" />
+        <col width="70px" />
+        <col width="*"/>
+        </thead>
+        <tbody id="ports"></tbody>
+    </table>
+
+    <div id="change-dialog" style="display: none">
+        <table>
+            <tr><td class="translate">Take new settings into config:</td><td><input type="checkbox" checked id="change_take"/></td></tr>
+            <tr><td class="translate">Old IP:</td>      <td><input style="width: 100%" id="change_old_ip"/></td></tr>
+            <tr><td class="translate">Old password:</td><td><input style="width: 100%" id="change_old_password"/></td></tr>
+            <tr><td class="translate">New IP:</td>      <td><input style="width: 100%" id="change_new_ip"/></td></tr>
+            <tr><td class="translate">New password:</td><td><input style="width: 100%" id="change_new_password"/></td></tr>
+        </table>
+    </div>
+</div>
+</html>
