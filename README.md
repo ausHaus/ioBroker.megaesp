@@ -1,5 +1,5 @@
 ![Logo](admin/megad.png)
-ioBroker MegaD-328 adapter
+ioBroker Mega-ESP adapter
 =================
 
 [![NPM version](http://img.shields.io/npm/v/iobroker.megad.svg)](https://www.npmjs.com/package/iobroker.megad)
@@ -8,13 +8,13 @@ ioBroker MegaD-328 adapter
 
 [![NPM](https://nodei.co/npm/iobroker.megad.png?downloads=true)](https://nodei.co/npm/iobroker.megad/)
 
-Lets control the [MegaD-328](http://www.ab-log.ru/smart-house/ethernet/megad-328) over ethernet.
+Lets control the [Mega-ESP](http://ab-log.ru/forum/viewtopic.php?f=1&t=1130) over ethernet.
 ## English 
 [по русски](#Русский)
 
 ## Install
 
-```node iobroker.js add megad```
+```node iobroker.js add megaesp```
 
 ### Information
 The device has 14 ports, 0-7 inputs and 8-13 outputs.
@@ -33,15 +33,15 @@ MegaD-328 cannot report on other port than 80.
 
 ### Configuration
 
-- IP: IP address of MegaD-328;
-- MegaD-328 Name: Name of the MegaD-328 to assign the port changes, e.g. "DevA". If no name set the adapter instance will be used for that;
+- IP: IP address of Mega-ESP;
+- Mega-ESP Name: Name of the MegaD-328 to assign the port changes, e.g. "DevA". If no name set the adapter instance will be used for that;
 - Port: Listening port on ioBroker. MegaD-328 cannot send to ports other than 80. Default value: 80. 
 - Poll interval: poll interval in seconds. All configured input ports will be polled in defined interval;
 - Password: password to access the device (max 3 characters). Default value "sec";
 
-MegaD-328 can report about changes on some ports if configured. 
+Mega-ESP can report about changes on some ports if configured. 
 You can configure something like that "http://ioBrokerIP/instance" on MegaD-328 in "Net"-Field and MegaD-328 will send reports like this one "http://ioBrokerIP/instance/?pt=7" to ioBroker. 
-That means the button on port 7 was pressed. ioBroker expects instance number (e.g. "0") or defined name of MegaD-328 (e.g. "DevA"). The "Net" field will look like: "http://192.168.0.8/0/".
+That means the button on port 7 was pressed. ioBroker expects instance number (e.g. "0") or defined name of Mega-ESP (e.g. "DevA"). The "Net" field will look like: "http://192.168.0.8/0/".
 
 ### Ports
 All ports, that are desired to be used must be configured in right order. Following settings must be set for every port:
