@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "description": "Lets control the Mega-ESP over ethernet (http://ab-log.ru/forum/viewtopic.php?f=1&t=1130) from ioBroker",
   "author": {
-    "name": "bluefox",
-    "email": "dogafox@gmail.com"
+    "name": "ausHaus",
+    "email": "aushaus@gmail.com"
   },
   "homepage": "https://github.com/ausHaus/ioBroker.megaesp",
   "keywords": [
