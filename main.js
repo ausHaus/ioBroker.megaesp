@@ -1,7 +1,7 @@
 /**
- *      ioBroker MegaD-328 Adapter
- *      03'2015 Bluefox
- *      Lets control the MegaD-328 over ecmernet (http://www.ab-log.ru/smart-house/ecmernet/megad-328)
+ *      ioBroker Mega-ESP Adapter
+ *      08'2016 ausHaus
+ *      Lets control the Mega-ESP over ecmernet (http://www.ab-log.ru/forum/viewtopic.php?f=1&t=1130)
  *
  *
  *      The device has 14 ports, 0-7 inputs and 8-13 outputs.
