@@ -452,7 +452,6 @@ function writeConfigDevice(ip, pass, config, callback) {
     var options = {
         host: parts[0],
         port: parts[1] || 80,
-        ////port: parts[1] || '',
         ///path: '/' + pass + '/?cf=1'        ///http://192.168.1.20/sec/cfg/?pin=123&nm=1&eip=192.168.1.19
         path: '/' + pass + '/cfg/?pin=123&nm=1'
     };
@@ -575,24 +574,19 @@ function detectPortConfig(ip, pass, length, callback, port, result) {
                 var settings = {};
                 // Analyse answer
                 var inputs = data.match(/<input [^>]+>/g);
-                ////var inputs = data.match(/<input "[^>]"+>/g);      ////blogai
-                ////var inputs = data.match(/<input "[^>]+">/g);      ////blogai
-                adapter.log.debug('TEST inputs: ' + inputs);  
+                ////adapter.log.debug('TEST inputs: ' + inputs);  
                 var i;
 
                 if (inputs) {
                     for (i = 0; i < inputs.length; i++) {
                         var args = inputs[i].match(/(\w+)=([^<> ]+)/g);
-                        ////var args = inputs[i].match(/"(\w+)"=([^<> ]+)/g);       ////blogai
-                        ////var args = inputs[i].match(/"(\w+)"="([^<> ]+)"/g);     ////blogai
-                        adapter.log.debug('TEST args: ' + args);
+                        ////adapter.log.debug('TEST args: ' + args);
                         if (args) {
                             var isettings = {};
                             for (var a = 0; a < args.length; a++) {
                                 var parts = args[a].split('=');
                                 isettings[parts[0]] = parts[1].replace(/^"/, '').replace(/"$/, '');
-                                ////isettings[parts[0]] = parts[1].replace(/^"/, '').replace(/"$/, '"');
-                                adapter.log.debug('TEST parts: ' + parts);
+                                ////adapter.log.debug('TEST parts: ' + parts);
                             }
 
                             if (isettings.name) {
@@ -605,21 +599,16 @@ function detectPortConfig(ip, pass, length, callback, port, result) {
                     }
                 }
                 inputs = data.match(/<select .+?<\/select>/g);
-                ////inputs = data.match(/<select ".+?<\"/select>/g);   ///luzta draiveris
-                ////inputs = data.match(/<select ".+"?<\/select>/g);   ///blogai
-                ////inputs = data.match(/<select ".+?"<\/select>/g);   ///blogai
-                adapter.log.debug('TEST inputs2: ' + inputs);
+                ////adapter.log.debug('TEST inputs2: ' + inputs);
                 if (inputs) {
                     for (i = 0; i < inputs.length; i++) {
                         ///var name = inputs[i].match(/name=(\w+)/);        
-                        var name = inputs[i].match(/name="(\w+)"/);   ////DABAR
-                        ////var name = inputs[i].match(/name='(\w+)'/);   ////DABAR
-                        adapter.log.debug('TEST name: ' + name);
+                        var name = inputs[i].match(/name="(\w+)"/);
+                        ////adapter.log.debug('TEST name: ' + name);
                         if (name) {
                             ///var vars = inputs[i].match(/<option value=(\d+) selected>/);
-                            ////var vars = inputs[i].match(/<option value="(\d+)" selected>/);     ////DABAR
-                            var vars = inputs[i].match(/<option value="(\d+)"selected>/);     ////DABAR
-                            adapter.log.debug('TEST vars: ' + vars);
+                            var vars = inputs[i].match(/<option value="(\d+)"selected>/);
+                            ////adapter.log.debug('TEST vars: ' + vars);
                             if (vars) {
                                 settings[name[1]] = vars[1];
                             } else {
@@ -632,21 +621,14 @@ function detectPortConfig(ip, pass, length, callback, port, result) {
                 if (settings.pty === undefined) {
                     ///if (data.indexOf('>Type In<') != -1) {
                     if (data.indexOf('>Type: In<') != -1) {
-                    ////if (data.indexOf('>In<') != -1) {
                         settings.pty = 0;
                     ///} else if (data.indexOf('>Type Out<') != -1) {
-                    ////} else if (data.indexOf('>Type Out SW<') != -1) {
                     } else if (data.indexOf('>Type: Out SW<') != -1) {
-                    ////} else if (data.indexOf('>Out SW<') != -1) {
                         settings.pty = 1;
                     ///} else if (data.match(/<br>A\d+\//)) {
                     } else if (data.match(/<br>P9\//)) {
                         settings.pty = 2;
-                    ////} else if (data.indexOf('>Type: DSen<') != -1) {
-                        ////settings.pty = 3;
-                    ////} else if (data.indexOf('>Type Out PWM<') != -1) {
                     } else if (data.indexOf('>Type: Out PWM<') != -1) {
-                    ////} else if (data.indexOf('>Out PWM<') != -1) {
                         settings.pty = 4;
                     } else if (data.indexOf('>Type: WS281x<') != -1) {
                         settings.pty = 5;
@@ -665,10 +647,6 @@ function detectPortConfig(ip, pass, length, callback, port, result) {
                     settings.m   = settings.m   || 0;
                     settings.pwm = settings.pwm || 0;
                 }*/
-                ////if (settings.pty == 4) {
-                    ////settings.m   = settings.m   || 0;
-                    ////settings.pwm = settings.pwm || 0;
-                ////}
                 if (settings.m    !== undefined) settings.m    = parseInt(settings.m,    10);
                 if (settings.d    !== undefined) settings.d    = parseInt(settings.d,    10);
                 if (settings.misc !== undefined) settings.misc = parseInt(settings.misc, 10);
@@ -696,11 +674,9 @@ function detectDeviceConfig(ip, pass, callback) {
     var options = {
         host: parts[0],
         port: parts[1] || 80,
-        ////port: parts[1] || '',
         ///path: '/' + pass + '/?cf=1'
         path: '/' + pass + '/cfg/?cn=1'
         ////path: '/' + pass + '/cfg/?cn=2'
-        ////path: '/' + pass + '/cfg/'
     };
 
     adapter.log.info('read config from port: http://' + ip + options.path);
@@ -719,21 +695,19 @@ function detectDeviceConfig(ip, pass, callback) {
                 // parse config
                 // Analyse answer
                 var inputs = data.match(/<input [^>]+>/g);
-                ////var inputs = data.match(/<input "[^>]+">/g);
-                adapter.log.debug('TEST inputs3: ' + inputs);
+                ////adapter.log.debug('TEST inputs3: ' + inputs);
                 var i;
                 var settings = {};
 
                 if (inputs) {
                     for (i = 0; i < inputs.length; i++) {
                         var args = inputs[i].match(/(\w+)=([^<> ]+)/g);
-                        ////var args = inputs[i].match(/"(\w+)"="([^<> ]+)"/g);
-                        adapter.log.debug('TEST args2: ' + args);
+                        ////adapter.log.debug('TEST args2: ' + args);
                         if (args) {
                             var isettings = {};
                             for (var a = 0; a < args.length; a++) {
                                 var parts = args[a].split('=');
-                                adapter.log.debug('TEST parts2: ' + parts);
+                                ////adapter.log.debug('TEST parts2: ' + parts);
                                 isettings[parts[0]] = parts[1].replace(/^"/, '').replace(/"$/, '');
                             }
 
@@ -747,17 +721,16 @@ function detectDeviceConfig(ip, pass, callback) {
                     }
                 }
                 inputs = data.match(/<select .+?<\/select>/g);
-                adapter.log.debug('TEST inputs3: ' + inputs);
-                ////inputs = data.match(/<select ".+?"<\/select>/g);
+                ////adapter.log.debug('TEST inputs3: ' + inputs);
                 if (inputs) {
                     for (i = 0; i < inputs.length; i++) {
                         ///var name = inputs[i].match(/name=(\w+)/);
-                        var name = inputs[i].match(/name="(\w+)"/);       ////DABAR
-                        adapter.log.debug('TEST name2: ' + name);
+                        var name = inputs[i].match(/name="(\w+)"/);
+                        ////adapter.log.debug('TEST name2: ' + name);
                         if (name) {
                             ///var vars = inputs[i].match(/<option value=(\d+) selected>/);
-                            var vars = inputs[i].match(/<option value="(\d+)"selected>/);       ////DABAR
-                            adapter.log.debug('TEST vars3: ' + vars);
+                            var vars = inputs[i].match(/<option value="(\d+)"selected>/);
+                            ////adapter.log.debug('TEST vars3: ' + vars);
                             if (vars) {
                                 settings[name[1]] = vars[1];
                             } else {
@@ -1717,18 +1690,54 @@ function syncObjects() {
             } else
             // WS281x
             if (settings.pty == 5) {
-                ////settings.factor  = parseFloat(settings.factor || 1);
-                ////settings.offset  = parseFloat(settings.offset || 0);
-
-                obj.common.write = false;
+                obj.common.write = true;
                 obj.common.read  = true;
                 obj.common.def   = 0;
-                ////obj.common.min   = settings.offset;
-                ////obj.common.max   = settings.offset + settings.factor;
-                obj.common.desc  = 'P' + p + ' - analog input';
+                obj.common.desc  = 'P' + p + ' - count';
                 obj.common.type  = 'number';
                 if (!obj.common.role) obj.common.role = 'value';
-                ////obj.native.threshold = settings.offset + settings.factor * settings.misc;
+                obj1 = {
+                    _id: adapter.namespace + '.' + id + '_red',
+                    common: {
+                        name:  obj.common.name + '_red',
+                        role:  'state',
+                        write: true,
+                        read:  false,
+                        def:   0,
+                        desc:  'P' + p + ' - inputs red',
+                        type:  'number'
+                    },
+                    native: JSON.parse(JSON.stringify(settings)),
+                    type:   'state'
+                };
+                obj2 = {
+                    _id: adapter.namespace + '.' + id + '_green',
+                    common: {
+                        name:  obj.common.name + '_green',
+                        role:  'state',
+                        write: true,
+                        read:  false,
+                        def:   0,
+                        desc:  'P' + p + ' - inputs green',
+                        type:  'number'
+                    },
+                    native: JSON.parse(JSON.stringify(settings)),
+                    type:   'state'
+                };
+                obj3 = {
+                    _id: adapter.namespace + '.' + id + '_blue',
+                    common: {
+                        name:  obj.common.name + '_blue',
+                        role:  'state',
+                        write: true,
+                        read:  false,
+                        def:   0,
+                        desc:  'P' + p + ' - inputs blue',
+                        type:  'number'
+                    },
+                    native: JSON.parse(JSON.stringify(settings)),
+                    type:   'state'
+                };
             } else
             // output
             if (settings.pty == 6) {
