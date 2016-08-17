@@ -17,7 +17,7 @@
         "loglevel":                 "info",
         "icon":                     "megad.png",
         "messagebox":               true,
-        "readme":                   "https://raw.githubusercontent.com/ioBroker/ioBroker.megaesp/master/README.md",
+        "readme":                   "https://github.com/ausHaus/ioBroker.megaesp/blob/master/README.md",
         "keywords":                 ["Mega-ESP", "communication"],
 		"enabled":                  true,
         "extIcon":                  "https://raw.githubusercontent.com/ioBroker/ioBroker.megad/master/admin/megad.png",
