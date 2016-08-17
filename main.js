@@ -1696,7 +1696,7 @@ function syncObjects() {
                 obj.common.desc  = 'P' + p + ' - count';
                 obj.common.type  = 'number';
                 if (!obj.common.role) obj.common.role = 'value';
-                /*obj1 = {
+                obj1 = {
                     _id: adapter.namespace + '.' + id + '_red',
                     common: {
                         name:  obj.common.name + '_red',
@@ -1737,7 +1737,7 @@ function syncObjects() {
                     },
                     native: JSON.parse(JSON.stringify(settings)),
                     type:   'state'
-                };*/
+                };
             } else
             // output
             if (settings.pty == 6) {
