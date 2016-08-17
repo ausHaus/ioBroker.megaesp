@@ -4,9 +4,9 @@
         "version":                  "0.0.1",
         "title":                    "Mega-ESP Adapter",
         "desc":                     {
-            "en": "Lets control the Mega-ESP over ethernet/internet (http://www.ab-log.ru/smart-house/ethernet/megad-328)",
-            "de": "Ermöglicht die steuerung von Mega-ESP über Ethernet/Internet (http://www.ab-log.ru/smart-house/ethernet/megad-328)",
-            "ru": "Позволяет управлять Mega-ESP через ethernet/интернет (http://www.ab-log.ru/smart-house/ethernet/megad-328)"
+            "en": "Lets control the Mega-ESP over ethernet/internet (http://www.ab-log.ru/forum/viewtopic.php?f=1&t=1130)",
+            "de": "Ermöglicht die steuerung von Mega-ESP über Ethernet/Internet (http://www.ab-log.ru/forum/viewtopic.php?f=1&t=1130)",
+            "ru": "Позволяет управлять Mega-ESP через ethernet/интернет (http://www.ab-log.ru/forum/viewtopic.php?f=1&t=1130)"
         },
         "authors": [
             "bluefox <bluefox@ccu.io>"
