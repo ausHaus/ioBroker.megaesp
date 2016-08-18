@@ -1190,26 +1190,23 @@ function processPortState(_port, value) {
             if (_ports[_port].pty == 1) {        ////Out SW
                 adapter.log.debug('detected new value on port [' + _port + ']: ' + (value ? true : false));
                 adapter.setState(_ports[_port].id, {val: value ? true : false, ack: true, q: q});
-            } else
-            if (_ports[_port].pty == 4) {         ////Out PWM
+            } else //output PWM
+            if (_ports[_port].pty == 4) {
                 //f = value * _ports[_port].factor + _ports[_port].offset;
                 value = Math.round(value * 1000) / 1000;
 
                 adapter.log.debug('detected new value on port [' + _port + ']: ' + value);
                 adapter.setState(_ports[_port].id, {val: value, ack: true, q: q});
-                ////adapter.log.debug('detected new value on port [' + _port + ']: ' + (value ? true : false));
-                ////adapter.setState(_ports[_port].id, {val: value ? true : false, ack: true, q: q});
-                ////f = value * _ports[_port].factor + _ports[_port].offset;
-                ////value = Math.round(value * 1000) / 1000;
-
-                ////adapter.log.debug('detected new value on port [' + _port + ']: ' + value + ', calc state ' + f);
-                ////adapter.setState(_ports[_port].id, {val: f, ack: true, q: q});
-            }
             /*} else // internal temperature sensor
             if (_ports[_port].pty == 4) {
                 adapter.log.debug('detected new value on port [' + _port + ']: ' + value);
                 adapter.setState(_ports[_port].id, {val: value, ack: true, q: q});
             }*/
+            } else // output SL
+            if (_ports[_port].pty == 8) {
+                adapter.log.debug('detected new value on port [' + _port + ']: ' + (value ? true : false));
+                adapter.setState(_ports[_port].id, {val: value ? true : false, ack: true, q: q});
+            }
 
             _ports[_port].value    = value;
             _ports[_port].q        = q;
@@ -1475,7 +1472,6 @@ function syncObjects() {
 
             if (settings.name) {
                 id += '_' + settings.name.replace(/[\s.]/g, '_');
-                ////id += '_' + settings.name.replace(/"[\s.]"/g, '_');     ///naujas
             }
             adapter.config.ports[p].id  = adapter.namespace + '.' + id;
             adapter.config.ports[p].pty = parseInt(adapter.config.ports[p].pty, 10) || 0;
@@ -1594,9 +1590,6 @@ function syncObjects() {
                     if (!obj.common.role) obj.common.role = 'state';
                 }*/
             if (settings.pty == 1) {
-                ////settings.factor  = parseFloat(settings.factor || 1);
-                ////settings.offset  = parseFloat(settings.offset || 0);
-
                 obj.common.write = true;
                 obj.common.read  = true;
                 obj.common.def   = false;
@@ -1617,7 +1610,6 @@ function syncObjects() {
                 obj.common.desc  = 'P' + p + ' - analog input';
                 obj.common.type  = 'number';
                 if (!obj.common.role) obj.common.role = 'value';
-                ///obj.native.threshold = settings.offset + settings.factor * settings.misc;
                 obj.native.threshold = settings.offset + settings.factor * settings.adc;
             } else
             // digital temperature sensor
@@ -1673,7 +1665,7 @@ function syncObjects() {
                 obj.common.type  = 'number';
                 if (!obj.common.role) obj.common.role = 'value.temperature';*/
             } else
-            // output
+            // output PWM
             if (settings.pty == 4) {
                 settings.factor  = parseFloat(settings.factor || 1);
                 settings.offset  = parseFloat(settings.offset || 0);
@@ -1739,40 +1731,26 @@ function syncObjects() {
                     type:   'state'
                 };
             } else
-            // output
+            //I2C
             if (settings.pty == 6) {
-                ////settings.factor  = parseFloat(settings.factor || 1);
-                ////settings.offset  = parseFloat(settings.offset || 0);
-
                 obj.common.write = true;
                 obj.common.read  = true;
                 obj.common.def   = 0;
                 obj.common.desc  = 'P' + p + ' - digital output (I2C_SDA)';
                 obj.common.type  = 'number';
-                ////obj.common.min   = 0;
-                ////obj.common.max   = 255;
                 if (!obj.common.role) obj.common.role = 'level';
-                ////obj.native.pwm = settings.pwm;
             } else
             if (settings.pty == 7) {
-                ////settings.factor  = parseFloat(settings.factor || 1);
-                ////settings.offset  = parseFloat(settings.offset || 0);
-
                 obj.common.write = true;
                 obj.common.read  = true;
                 obj.common.def   = 0;
                 obj.common.desc  = 'P' + p + ' - digital output (I2C_SCL)';
                 obj.common.type  = 'number';
-                ////obj.common.min   = 0;
-                ////obj.common.max   = 255;
                 if (!obj.common.role) obj.common.role = 'level';
-                ////obj.native.pwm = settings.pwm;
              } else
+             // output SL
              if (settings.pty == 8) {
-                ////settings.factor  = parseFloat(settings.factor || 1);
-                ////settings.offset  = parseFloat(settings.offset || 0);
-
-                obj.common.write = true;
+                obj.common.write = false;
                 obj.common.read  = true;
                 obj.common.def   = false;
                 obj.common.desc  = 'P' + p + ' - digital output';
