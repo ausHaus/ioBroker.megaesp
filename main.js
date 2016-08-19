@@ -203,12 +203,12 @@ function writeConfigOne(ip, pass, _settings, callback, port, errors) {
 
         // ADC
         settings.d   = settings.d   || '';
-        settings.tr  = settings.tr  || '';
+        ////settings.tr  = settings.tr  || '';
         settings.acm = settings.acm || '';
         ///settings.ecm  = ''; //settings.ecm  || '';
         settings.ecm = settings.ecm || '';
         ///options.path += (((port == 14 || port == 15) && settings.pty == 2) ? '' : '&pty=2') + '&m=' + (settings.m || 0) + '&misc=' + (settings.misc || 0) + '&acm=' + encodeURIComponent((settings.acm || '').trim()) + '&ecm=';
-        options.path += ((port == 9 && settings.pty == 2) ? '' : '&pty=2') + '&d=' + (settings.d || '') + '&m=' + (settings.m || 0) + '&adc=' + (settings.adc || 0) + '&acm=' + encodeURIComponent((settings.acm || '').trim()) + '&tr=' + (settings.tr || '') + '&ecm=' + encodeURIComponent((settings.ecm || '').trim());    
+        options.path += ((port == 9 && settings.pty == 2) ? '' : '&pty=2') + '&d=' + (settings.d || '') + '&m=' + (settings.m || 0) + '&adc=' + (settings.adc || 0) + '&acm=' + encodeURIComponent((settings.acm || '').trim()) + '&tr=' + (settings.tr || 0) + '&ecm=' + encodeURIComponent((settings.ecm || '').trim());    
     } else
     if (settings.pty == 3) {
         settings.tr  = settings.tr  || '';
