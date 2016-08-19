@@ -1,7 +1,7 @@
 /**
  *      ioBroker Mega-ESP Adapter
  *      08'2016 ausHaus
- *      Lets control the Mega-ESP over ecmernet (http://www.ab-log.ru/forum/viewtopic.php?f=1&t=1130)
+ *      Lets control the Mega-ESP over ethernet (http://www.ab-log.ru/forum/viewtopic.php?f=1&t=1130)
  *
  *
  *      The device has 14 ports, 0-7 inputs and 8-13 outputs.
