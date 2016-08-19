@@ -173,7 +173,7 @@ function writeConfigOne(ip, pass, _settings, callback, port, errors) {
     // Input
     if (!settings.pty) {
         ///settings.d    = parseInt(settings.d, 10) || 0;
-        settings.tr   = settings.tr || '';
+        ////settings.tr   = settings.tr || '';
         settings.acm  = settings.acm || '';
         ///settings.ecm  = '';//settings.ecm  || '';
         settings.ecm  = settings.ecm  || '';
@@ -211,7 +211,7 @@ function writeConfigOne(ip, pass, _settings, callback, port, errors) {
         options.path += ((port == 9 && settings.pty == 2) ? '' : '&pty=2') + '&d=' + (settings.d || '') + '&m=' + (settings.m || 0) + '&adc=' + (settings.adc || 0) + '&acm=' + encodeURIComponent((settings.acm || '').trim()) + '&tr=' + (settings.tr || 0) + '&ecm=' + encodeURIComponent((settings.ecm || '').trim());    
     } else
     if (settings.pty == 3) {
-        settings.tr  = settings.tr  || '';
+        ////settings.tr  = settings.tr  || '';
         settings.acm = settings.acm || '';
         ///settings.ecm  = ''; //settings.ecm  || '';
         settings.ecm = settings.ecm || '';
