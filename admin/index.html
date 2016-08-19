@@ -459,7 +459,7 @@
                     if (ports[index].m      === undefined) ports[index].m = 0;
                 }*/
                 ///if (ports[index].m > 3) ports[index].m = 0;
-                if (ports[index].m      === undefined) ports[index].m = 0;    ////DABAR
+                if (ports[index].m      === undefined) ports[index].m = 0;
             } else
             if (ports[index].pty == 4) {
                 if (ports[index].factor !== undefined) delete ports[index].factor;
@@ -470,8 +470,8 @@
                 if (ports[index].ecm    !== undefined) delete ports[index].ecm;
                 if (ports[index].acm    !== undefined) delete ports[index].acm;
                 if (ports[index].d      === undefined) ports[index].d = 0;
-                ////if (ports[index].pwm    === undefined) ports[index].pwm = 0;    /////ne esu tikras kad nereikia
-                ////if (ports[index].misc   !== undefined) delete ports[index].misc;
+                if (ports[index].pwm    === undefined) ports[index].pwm = 0;
+                if (ports[index].misc   !== undefined) delete ports[index].misc;
                 ////if (ports[index].m      === undefined) ports[index].m = 0;
                 ////if (ports[index].m > 1) ports[index].m = 0;
             } else
@@ -484,6 +484,7 @@
                 if (ports[index].ecm    !== undefined) delete ports[index].ecm;
                 if (ports[index].acm    !== undefined) delete ports[index].acm;
                 if (ports[index].pix    === undefined) ports[index].pix = 0;
+                if (ports[index].misc   !== undefined) delete ports[index].misc;
                 ////if (ports[index].r      === undefined) ports[index].r = '';
                 ////if (ports[index].g      === undefined) ports[index].g = '';
                 ////if (ports[index].b      === undefined) ports[index].b = '';
