@@ -335,7 +335,15 @@
         if (portSettings.pty == 8) {
             text += _('Mast:') + ' <select class="tvalue" data-type="d" data-port="' + index + '">';
             text += '<option value="255" ' + ((portSettings.d == 255) ? 'selected' : '') + '>' + _('NC') + '</option>';
-            text += '<option value="1" ' + ((portSettings.d == 1) ? 'selected' : '') + '>P-4</option>';
+            text += '<option value="0" ' + ((portSettings.d == 0) ? 'selected' : '') + '>P-0</option>';
+            text += '<option value="1" ' + ((portSettings.d == 1) ? 'selected' : '') + '>P-1</option>';
+            text += '<option value="2" ' + ((portSettings.d == 2) ? 'selected' : '') + '>P-2</option>';
+            text += '<option value="3" ' + ((portSettings.d == 3) ? 'selected' : '') + '>P-3</option>';
+            text += '<option value="4" ' + ((portSettings.d == 4) ? 'selected' : '') + '>P-4</option>';
+            text += '<option value="5" ' + ((portSettings.d == 5) ? 'selected' : '') + '>P-5</option>';
+            text += '<option value="6" ' + ((portSettings.d == 6) ? 'selected' : '') + '>P-6</option>';
+            text += '<option value="7" ' + ((portSettings.d == 7) ? 'selected' : '') + '>P-7</option>';
+            text += '<option value="8" ' + ((portSettings.d == 8) ? 'selected' : '') + '>P-8</option>';
             text += '</select>';
         }
         if (portSettings.pty == 8) {
