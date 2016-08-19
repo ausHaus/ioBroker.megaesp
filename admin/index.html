@@ -83,7 +83,8 @@
         ///"Net>Act:":             {"en": "Net>Act:",              "de": "Net>Act:",                   "ru": "Net>Act:"},
         "Offset:":              {"en": "Offset:",               "de": "Offset:",                    "ru": "Сдвиг:"},
         "Factor:":              {"en": "Factor:",               "de": "Faktor:",                    "ru": "Множитель:"},
-        "Period:":              {"en": "Period:",               "de": "Period:",                    "ru": "Период:"}, 
+        "Period:":              {"en": "Period:",               "de": "Periode:",                   "ru": "Период:"},
+        "i2c bus speed:":       {"en": "i2c bus speed:",        "de": "i2c bus geschwindigkeit:",   "ru": "Скорость шины i2c:"},
         "DHT11":                {"en": "DHT11",                 "de": "DHT11",                      "ru": "DHT11"},
         "DHT22":                {"en": "DHT22",                 "de": "DHT22",                      "ru": "DHT22"},
         "PWM":                  {"en": "PWM",                   "de": "PWM",                        "ru": "ШИМ"},
@@ -321,6 +322,15 @@
             ////text += _('B:') + ' <input class="tvalue" data-type="b" type="text"  style="width: 70px" data-port="' + index + '" value="' + (portSettings.b || '') + '" maxsize="3"/>';
             text += _('Count:') + ' <input class="tvalue" data-type="pix" type="text"  style="width: 70px" data-port="' + index + '" value="' + (portSettings.pix || 0) + '" maxsize="3"/>';
         }
+        
+        if (portSettings.pty == 7) {
+            text += _('i2c bus speed:') + ' <select class="tvalue" data-type="d" data-port="' + index + '">';
+            text += '<option value="1" ' + ((portSettings.m == 1) ? 'selected' : '') + '>100</option>';
+            text += '<option value="2" ' + ((portSettings.m == 2) ? 'selected' : '') + '>200</option>';
+            text += '<option value="3" ' + ((portSettings.m == 3) ? 'selected' : '') + '>300</option>';
+            text += '<option value="3" ' + ((portSettings.m == 4) ? 'selected' : '') + '>400</option>';
+            text += '</select>';
+        }
 
         if (portSettings.pty == 8) {
             text += _('Mast:') + ' <select class="tvalue" data-type="d" data-port="' + index + '">';
@@ -501,7 +511,7 @@
                 if (ports[index].acm    !== undefined) delete ports[index].acm;
                 ////if (ports[index].d      === undefined) ports[index].d = 0;
                 if (ports[index].misc   !== undefined) delete ports[index].misc;
-                ////if (ports[index].m      === undefined) ports[index].m = 0;
+                if (ports[index].m      === undefined) ports[index].m = '';
                 ////if (ports[index].m > 1) ports[index].m = 0;
             } else
             if (ports[index].pty == 8) {
@@ -512,8 +522,8 @@
 
                 if (ports[index].ecm    !== undefined) delete ports[index].ecm;
                 if (ports[index].acm    !== undefined) delete ports[index].acm;
-                if (ports[index].d      === undefined) ports[index].d = 0;
-                ////if (ports[index].misc   !== undefined) delete ports[index].misc;
+                if (ports[index].d      === undefined) ports[index].d = 255;
+                if (ports[index].misc   !== undefined) delete ports[index].misc;
                 if (ports[index].m      === undefined) ports[index].m = 0;
                 ////if (ports[index].m > 1) ports[index].m = 0;
             } else {
@@ -680,6 +690,7 @@
                     acm:    '',
                     ecm:    '',
                     m:      0,
+                    d:      255,
                     factor: 1,
                     offset: 0,
 
@@ -953,7 +964,7 @@
                     if (aPorts[p].pty == 7) {
                         // output digital port
                         aPorts[p].name    = ports[p].name || ('P' + p);
-                        ////aPorts[p].m       = aPorts[p].m   || 0;
+                        aPorts[p].m       = aPorts[p].m   || '';
                         ////aPorts[p].d       = aPorts[p].d   || 0;
 
                         aPorts[p].role    = ports[p].role || 'button';
@@ -962,7 +973,7 @@
                         // output digital port
                         aPorts[p].name    = ports[p].name || ('P' + p);
                         aPorts[p].m       = aPorts[p].m   || 0;
-                        aPorts[p].d       = aPorts[p].d   || 0;
+                        aPorts[p].d       = aPorts[p].d   || 255;
                         
                         aPorts[p].role    = ports[p].role || 'button';
                     } else {
