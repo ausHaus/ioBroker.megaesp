@@ -256,7 +256,7 @@ function writeConfigOne(ip, pass, _settings, callback, port, errors) {
         ////if (settings.pwm < 0)   settings.pwm = 0;
 
         // I2C 
-        options.path += '&pty=7';
+        options.path += '&pty=7' + '&m=' + (settings.m || '');
     } else
     if (settings.pty == 8) {
         ////settings.pwm = parseInt(settings.pwm, 10) || 0;
@@ -264,7 +264,7 @@ function writeConfigOne(ip, pass, _settings, callback, port, errors) {
         ////if (settings.pwm < 0)   settings.pwm = 0;
 
         // digital out SL
-        options.path += '&pty=8&'+ '&d=' + (settings.d || '') + '&m=' + (settings.m || '');
+        options.path += '&pty=8'+ '&d=' + (settings.d || '') + '&m=' + (settings.m || '');
     } else {
         // NC
         options.path += '&pty=255';
