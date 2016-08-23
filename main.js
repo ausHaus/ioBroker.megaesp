@@ -64,6 +64,7 @@ adapter.on('stateChange', function (id, state) {
                 sendCommand(ports[id].native.port, state.val);
             } else if (id.indexOf('_counter') !== -1) {
                 sendCommandToCounter(ports[id].native.port, state.val);
+            }
             //  WS281x    
             if (ports[id].common.type == 'string') {
             } else if (id.match(/_red|_green|_blue^/)) {
@@ -1444,10 +1445,10 @@ function sendCommandToCounter(port, value) {
 }
 
 function sendCommandToRGB(rgbId) {    //  WS281x
-   rgbs[rgbId].timer = null;
-   var port = ports[rgbId + '_blue'].native.port;
+    rgbs[rgbId].timer = null;
+    var port = ports[rgbId + '_blue'].native.port;
 
-   //'http://espIP/sec/?pt=3&r=25&g=25&b=25'
+    //'http://espIP/sec/?pt=3&r=25&g=25&b=25'
     var data = 'pt=' + port + '&r=' + (rgbs[rgbId].red || 0) + '&g=' + (rgbs[rgbId].green || 0) + '&b=' + (rgbs[rgbId].blue || 0)
 
     var parts = adapter.config.ip.split(':');
