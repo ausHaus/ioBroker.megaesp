@@ -1374,9 +1374,17 @@ function sendCommand(port, value) {
             adapter.log.debug('Response "' + xmldata + '"');
             if (adapter.config.ports[port]) {
                 // Set state only if positive response from megaESP
-                if (!adapter.config.ports[port].m) {
+                /*if (!adapter.config.ports[port].m) {
                     adapter.setState(adapter.config.ports[port].id, value ? true : false, true);
                 } else {
+                    var f = value * adapter.config.ports[port].factor + adapter.config.ports[port].offset;
+                    f = Math.round(f * 1000) / 1000;
+                    adapter.setState(adapter.config.ports[port].id, f, true);
+                }*/
+                if (adapter.config.ports[port].pty == 1) {
+                    adapter.setState(adapter.config.ports[port].id, value ? true : false, true);
+                } else {
+                ////if (!adapter.config.ports[port].pty == 4) {     ///// SUPER NAUJAS
                     var f = value * adapter.config.ports[port].factor + adapter.config.ports[port].offset;
                     f = Math.round(f * 1000) / 1000;
                     adapter.setState(adapter.config.ports[port].id, f, true);
