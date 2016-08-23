@@ -27,6 +27,7 @@ var server =  null;
 var ports  = {};
 var askInternalTemp = false;
 var connected = false;
+var rgbs = {};
 
 var adapter = utils.adapter('megaesp');
 
@@ -63,6 +64,19 @@ adapter.on('stateChange', function (id, state) {
                 sendCommand(ports[id].native.port, state.val);
             } else if (id.indexOf('_counter') !== -1) {
                 sendCommandToCounter(ports[id].native.port, state.val);
+            //  WS281x    
+            if (ports[id].common.type == 'string') {
+            } else if (id.match(/_red|_green|_blue^/)) {
+                var pos   = id.lastIndexOf('_');
+                var rgbId = id.substring(0, pos);
+                var color = id.substring(pos + 1);
+
+                rgbs[rgbId] = rgbs[rgbId] || {};
+                rgbs[rgbId][color] = state.val;
+                // stop timer if running
+                if (rgbs[rgbId].timer) clearTimeout(rgbs[rgbId].timer);
+                // if no more changes in 100 ms, send command to device
+                rgbs[rgbId].timer = setTimeout(sendCommandToRGB, 100, rgbId);
             } else {
                 ports[id].native.offset = parseFloat(ports[id].native.offset || 0) || 0;
                 ports[id].native.factor = parseFloat(ports[id].native.factor || 1) || 1;
@@ -1429,6 +1443,40 @@ function sendCommandToCounter(port, value) {
     });
 }
 
+function sendCommandToRGB(rgbId) {    //  WS281x
+   rgbs[rgbId].timer = null;
+   var port = ports[rgbId + '_blue'].native.port;
+
+   //'http://espIP/sec/?pt=3&r=25&g=25&b=25'
+    var data = 'pt=' + port + '&r=' + (rgbs[rgbId].red || 0) + '&g=' + (rgbs[rgbId].green || 0) + '&b=' + (rgbs[rgbId].blue || 0)
+
+    var parts = adapter.config.ip.split(':');
+
+    var options = {
+        host: parts[0],
+        port: parts[1] || 80,
+        path: '/' + adapter.config.password + '/?' + data
+    };
+    adapter.log.debug('Send command "' + data + '" to ' + adapter.config.ip);
+
+    // Set up the request
+    http.get(options, function (res) {
+        var xmldata = '';
+        res.setEncoding('utf8');
+        res.on('error', function (e) {
+            adapter.log.warn(e.toString());
+        });
+        res.on('data', function (chunk) {
+            xmldata += chunk;
+        });
+        res.on('end', function () {
+            adapter.log.debug('Response "' + xmldata + '"');
+        });
+    }).on('error', function (e) {
+        adapter.log.warn('Got error by post request ' + e.toString());
+    });
+}    
+
 function addToEnum(enumName, id, callback) {
     adapter.getForeignObject(enumName, function (err, obj) {
         if (!err && obj) {
@@ -1690,12 +1738,12 @@ function syncObjects() {
             } else
             // WS281x
             if (settings.pty == 5) {
-                obj.common.write = true;
-                obj.common.read  = true;
+                obj.common.write = false;
+                obj.common.read  = false;
                 obj.common.def   = 0;
-                obj.common.desc  = 'P' + p + ' - count';
-                obj.common.type  = 'number';
-                if (!obj.common.role) obj.common.role = 'value';
+                obj.common.desc  = 'P' + p + ' - RGB';
+                obj.common.type  = 'string';
+                if (!obj.common.role) obj.common.role = 'indicator';
                 obj1 = {
                     _id: adapter.namespace + '.' + id + '_red',
                     common: {
