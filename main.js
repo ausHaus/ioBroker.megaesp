@@ -1744,7 +1744,7 @@ function syncObjects() {
                 obj.common.def   = 0;
                 obj.common.desc  = 'P' + p + ' - RGB';
                 obj.common.type  = 'string';
-                if (!obj.common.role) obj.common.role = 'indicator';
+                if (!obj.common.role) obj.common.role = 'indicator.RGB';
                 obj1 = {
                     _id: adapter.namespace + '.' + id + '_red',
                     common: {
