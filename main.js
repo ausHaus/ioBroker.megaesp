@@ -67,7 +67,7 @@ adapter.on('stateChange', function (id, state) {
             }
             //  WS281x    
             if (ports[id].common.type == 'string') {
-            } else if (id.match(/_red|_green|_blue^/)) {
+            } else if (id.match(/_red|_green|_blue|_^/)) {
                 var pos   = id.lastIndexOf('_');
                 var rgbId = id.substring(0, pos);
                 var color = id.substring(pos + 1);
