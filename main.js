@@ -1449,7 +1449,7 @@ function sendCommandToRGB(rgbId) {    //  WS281x
     var port = ports[rgbId + '_blue'].native.port;
 
     //'http://espIP/sec/?pt=3&r=25&g=25&b=25'
-    var data = 'pt=' + port + '&r=' + (rgbs[rgbId].red || 0) + '&g=' + (rgbs[rgbId].green || 0) + '&b=' + (rgbs[rgbId].blue || 0)
+    var data = 'pt=' + port + '&r=' + (rgbs[rgbId].red || 0) + '&g=' + (rgbs[rgbId].green || 0) + '&b=' + (rgbs[rgbId].blue || 0);
 
     var parts = adapter.config.ip.split(':');
 
