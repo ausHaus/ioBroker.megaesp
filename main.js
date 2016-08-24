@@ -60,14 +60,16 @@ adapter.on('stateChange', function (id, state) {
                 state.val = state.val ? 1 : 0;
             }
 
-            if (ports[id].common.type == 'boolean') {
+            if (ports[id].common.type === 'boolean') {
                 sendCommand(ports[id].native.port, state.val);
             } else if (id.indexOf('_counter') !== -1) {
                 sendCommandToCounter(ports[id].native.port, state.val);
-            }
+            } else
             //  WS281x    
-            if (ports[id].common.type == 'string') {
-            } else if (id.match(/_red|_green|_blue|_^/)) {
+            if (ports[id].common.type === 'string') {
+            } else
+            // If Red, Green or Blue
+            if (id.match(/_red^/) || id.match(/_green^/) || id.match(/_blue^/)) {
                 var pos   = id.lastIndexOf('_');
                 var rgbId = id.substring(0, pos);
                 var color = id.substring(pos + 1);
@@ -78,6 +80,17 @@ adapter.on('stateChange', function (id, state) {
                 if (rgbs[rgbId].timer) clearTimeout(rgbs[rgbId].timer);
                 // if no more changes in 100 ms, send command to device
                 rgbs[rgbId].timer = setTimeout(sendCommandToRGB, 100, rgbId);
+            } else 
+            // IF RGB
+            if (id.match(/_rgb^/)) {
+        	var rgb = state.val + '';
+            	if (rgb[0] === '#') rgb = rgb.substring(1);
+            	if (rgb.length === 3) rgb = rgb[0] + rgb[0] + rgb[1] + rgb[1] + rgb[2] + rgb[2];
+            	if (rgb.length !== 6) return adapter.log.error('Invalid RGB value: ' + rgb);
+            	var R = parseInt(rgb.substring(0, 2), 16);
+            	var G = parseInt(rgb.substring(2, 4), 16);
+            	var B = parseInt(rgb.substring(4), 16);
+            	sendCommandToRGB(ports[id].native.port, R, G, B);
             } else {
                 ports[id].native.offset = parseFloat(ports[id].native.offset || 0) || 0;
                 ports[id].native.factor = parseFloat(ports[id].native.factor || 1) || 1;
@@ -1444,12 +1457,18 @@ function sendCommandToCounter(port, value) {
     });
 }
 
-function sendCommandToRGB(rgbId) {    //  WS281x
-    rgbs[rgbId].timer = null;
-    var port = ports[rgbId + '_blue'].native.port;
-
-    //'http://espIP/sec/?pt=3&r=25&g=25&b=25'
-    var data = 'pt=' + port + '&r=' + (rgbs[rgbId].red || 0) + '&g=' + (rgbs[rgbId].green || 0) + '&b=' + (rgbs[rgbId].blue || 0);
+function sendCommandToRGB(rgbId, R, G, B) {    //  WS281x
+        var port;
+        var data;
+        if (R !== undefined) {
+                port = rgbId;
+ 	    data = 'pt=' + port + '&r=' + (R || 0) + '&g=' + (G || 0) + '&b=' + (B || 0);
+        } else {
+ 	    rgbs[rgbId].timer = null;
+ 	    port = ports[rgbId + '_blue'].native.port;
+ 	    //'http://espIP/sec/?pt=3&r=25&g=25&b=25'
+ 	    data = 'pt=' + port + '&r=' + (rgbs[rgbId].red || 0) + '&g=' + (rgbs[rgbId].green || 0) + '&b=' + (rgbs[rgbId].blue || 0);
+        }
 
     var parts = adapter.config.ip.split(':');
 
@@ -1561,6 +1580,7 @@ function syncObjects() {
             var obj1 = null;
             var obj2 = null;
             var obj3 = null;
+            var obj4 = null;
 
             // input
             if (!settings.pty) {
@@ -1749,7 +1769,7 @@ function syncObjects() {
                     _id: adapter.namespace + '.' + id + '_red',
                     common: {
                         name:  obj.common.name + '_red',
-                        role:  'state',
+                        role:  'light.color.red',
                         write: true,
                         read:  false,
                         def:   0,
@@ -1763,7 +1783,7 @@ function syncObjects() {
                     _id: adapter.namespace + '.' + id + '_green',
                     common: {
                         name:  obj.common.name + '_green',
-                        role:  'state',
+                        role:  'light.color.green',
                         write: true,
                         read:  false,
                         def:   0,
@@ -1777,12 +1797,26 @@ function syncObjects() {
                     _id: adapter.namespace + '.' + id + '_blue',
                     common: {
                         name:  obj.common.name + '_blue',
-                        role:  'state',
+                        role:  'light.color.blue',
                         write: true,
                         read:  false,
                         def:   0,
                         desc:  'P' + p + ' - inputs blue',
                         type:  'number'
+                    },
+                    native: JSON.parse(JSON.stringify(settings)),
+                    type:   'state'
+                };
+                obj4 = {
+                    _id: adapter.namespace + '.' + id  + '_rgb',
+                    common: {
+                        name:  obj.common.name + ' RGB',
+                        role:  'light.color.rgb',
+                        write: true,
+                        read:  false,
+                        def:   0,
+                        desc:  'P' + p + ' - inputs RGB as #RRGGBB',
+                        type:  'string'
                     },
                     native: JSON.parse(JSON.stringify(settings)),
                     type:   'state'
@@ -1831,6 +1865,10 @@ function syncObjects() {
             if (obj3) {
                 newObjects.push(obj3);
                 ports[obj3._id] = obj3;
+            }
+            if (obj4) {
+                newObjects.push(obj4);
+                ports[obj4._id] = obj4;
             }
         }
     }
