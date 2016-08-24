@@ -70,7 +70,7 @@ adapter.on('stateChange', function (id, state) {
             	
             } else 
             // If Red, Green or Blue
-            if (id.match(/_red^/) || id.match(/_green^/) || id.match(/_blue^/)) {
+            if (id.match(/_red$|_green$|_blue$/)) {
                 var pos   = id.lastIndexOf('_');
                 var rgbId = id.substring(0, pos);
                 var color = id.substring(pos + 1);
@@ -83,7 +83,7 @@ adapter.on('stateChange', function (id, state) {
                 rgbs[rgbId].timer = setTimeout(sendCommandToRGB, 100, rgbId);
             } else 
             // IF RGB
-            if (id.match(/_rgb^/)) {
+            if (id.match(/_rgb$/)) {
             	 var rgb = state.val + '';
             	 if (rgb[0] === '#') rgb = rgb.substring(1);
             	 if (rgb.length === 3) rgb = rgb[0] + rgb[0] + rgb[1] + rgb[1] + rgb[2] + rgb[2];
