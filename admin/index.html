@@ -58,6 +58,8 @@
         "ADC":                  {"en": "Analog in (ADC)",       "de": "Analog in (ADC)",            "ru": "Ан. вход (ADC)"},
         "WS281x":               {"en": "WS281x",                "de": "WS281x",                     "ru": "WS281x"},
         "Digital Sensor":       {"en": "Digital Sensor",        "de": "Digital Sensor",             "ru": "Циф. датчик"},
+        "I2C_SDA":              {"en": "I2C_SDA",               "de": "I2C_SDA",                    "ru": "I2C_SDA"},
+        "I2C_SCL":              {"en": "I2C_SCL",               "de": "I2C_SCL",                    "ru": "I2C_SCL"},
         "normal opened":        {"en": "normal opened",         "de": "bei schliessen",             "ru": "при замыкании"},
         "on change":            {"en": "on change",             "de": "auf änderung",               "ru": "при изменении"},
         "normal closed":        {"en": "normal closed",         "de": "bei auf",                    "ru": "при размыкании"},
@@ -76,15 +78,15 @@
         "H > threshold":        {"en": "H > threshold",         "de": "H > Schwellwert",            "ru": "H > порога"},
         "H < threshold":        {"en": "H < threshold",         "de": "H < Schwellwert",            "ru": "H < порога"},
         "H <> threshold":       {"en": "H <> threshold",        "de": "H <> Schwellwert",           "ru": "H <> порога"},
-        ///"TR:":                  {"en": "TR:",                   "de": "TR:",                        "ru": "TR:"},
-        ///"Act:":                 {"en": "Act:",                  "de": "Act:",                       "ru": "Act:"},
-        ///"Net:":                 {"en": "Net:",                  "de": "Net:",                       "ru": "Net:"},
-        ///"Net&Act:":             {"en": "Net&Act:",              "de": "Net&Act:"                    "ru": "Net&Act:"},
-        ///"Net>Act:":             {"en": "Net>Act:",              "de": "Net>Act:",                   "ru": "Net>Act:"},
+        "TR:":                  {"en": "TR:",                   "de": "TR:",                        "ru": "TR:"},
+        "Act:":                 {"en": "Act:",                  "de": "Act:",                       "ru": "Act:"},
+        "Net:":                 {"en": "Net:",                  "de": "Net:",                       "ru": "Net:"},
+        "Net & Act:":           {"en": "Net & Act:",            "de": "Net & Act:",                 "ru": "Net & Act:"},
+        "Net > Act:":           {"en": "Net > Act:",            "de": "Net > Act:",                 "ru": "Net > Act:"},
         "Offset:":              {"en": "Offset:",               "de": "Offset:",                    "ru": "Сдвиг:"},
         "Factor:":              {"en": "Factor:",               "de": "Faktor:",                    "ru": "Множитель:"},
         "Period:":              {"en": "Period:",               "de": "Periode:",                   "ru": "Период:"},
-        "i2c bus speed:":       {"en": "i2c bus speed:",        "de": "i2c bus geschwindigkeit:",   "ru": "Скорость шины i2c:"},
+        "I2C bus speed:":       {"en": "I2C bus speed:",        "de": "I2C bus geschwindigkeit:",   "ru": "Скорость шины I2C:"},
         "DHT11":                {"en": "DHT11",                 "de": "DHT11",                      "ru": "DHT11"},
         "DHT22":                {"en": "DHT22",                 "de": "DHT22",                      "ru": "DHT22"},
         "PWM":                  {"en": "PWM",                   "de": "PWM",                        "ru": "ШИМ"},
@@ -158,13 +160,17 @@
             text += '<option value="3" '   + ((portSettings.pty == 3)   ? 'selected' : '') + '>' + _('Digital Sensor')  + '</option>';
         }
         if (index == 7) {
-            text += '<option value="6" '   + ((portSettings.pty == 6)   ? 'selected' : '') + '>' + _('I2C_SDA')          + '</option>';
+            text += '<option value="6" '   + ((portSettings.pty == 6)   ? 'selected' : '') + '>' + _('I2C_SDA')         + '</option>';
         }
         if (index == 8) {
-            text += '<option value="7" '   + ((portSettings.pty == 7)   ? 'selected' : '') + '>' + _('I2C_SCL')          + '</option>';
+            text += '<option value="7" '   + ((portSettings.pty == 7)   ? 'selected' : '') + '>' + _('I2C_SCL')         + '</option>';
         }
         if (index == 9) {
             text += '<option value="2" '   + ((portSettings.pty == 2)   ? 'selected' : '') + '>' + _('ADC')             + '</option>';
+        }
+        if (index == 10 || index == 11 || index == 12 || index == 13 || index == 14 || index == 15 || index == 16 || index == 17 || index == 18 || index == 19 || if (index == 10 || index == 11 || index == 12 || index == 13 || index == 14 || index == 15 || index == 16 || index == 17 || index == 18 || index == 19 || index == 20 || index == 21 || index == 22 || index == 23 || index == 24 || index == 25) {
+            text += '<option value="0" '   + ((portSettings.in == 0)   ? 'selected' : '') + '>' + _('Output')      + '</option>';
+            text += '<option value="1" '   + ((portSettings.in == 1)   ? 'selected' : '') + '>' + _('Input')       + '</option>';
         }
         '</td>';
 
@@ -282,8 +288,8 @@
             text += '<option value="0" ' + ((portSettings.tr == 0) ? 'selected' : '') + '>' + _('not monitored') + '</option>';
             text += '<option value="1" ' + ((portSettings.tr == 1) ? 'selected' : '') + '>Act</option>';
             text += '<option value="2" ' + ((portSettings.tr == 2) ? 'selected' : '') + '>Net</option>';
-            text += '<option value="3" ' + ((portSettings.tr == 3) ? 'selected' : '') + '>Net&Act</option>';
-            text += '<option value="4" ' + ((portSettings.tr == 4) ? 'selected' : '') + '>Net>Act</option>';
+            text += '<option value="3" ' + ((portSettings.tr == 3) ? 'selected' : '') + '>Net & Act</option>';
+            text += '<option value="4" ' + ((portSettings.tr == 4) ? 'selected' : '') + '>Net > Act</option>';
             text += '</select>';
         }
 
@@ -295,7 +301,7 @@
         }
         
         if (portSettings.pty == 7) {
-            text += _('i2c bus speed:') + ' <select class="tvalue" data-type="d" data-port="' + index + '">';
+            text += _('I2C bus speed:') + ' <select class="tvalue" data-type="d" data-port="' + index + '">';
             text += '<option value="1" ' + ((portSettings.m == 1) ? 'selected' : '') + '>100</option>';
             text += '<option value="2" ' + ((portSettings.m == 2) ? 'selected' : '') + '>200</option>';
             text += '<option value="3" ' + ((portSettings.m == 3) ? 'selected' : '') + '>300</option>';
