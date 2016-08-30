@@ -1427,12 +1427,13 @@ function sendCommand(port, value) {
                 }*/
                 if (adapter.config.ports[port].pty == 1) {
                     adapter.setState(adapter.config.ports[port].id, value ? true : false, true);
-                } else {
-                ////if (!adapter.config.ports[port].pty == 4) {     ///// SUPER NAUJAS
+                }    
+                ////} else {
+                if (!adapter.config.ports[port].pty == 4) {     ////NAUJAS
                     var f = value * adapter.config.ports[port].factor + adapter.config.ports[port].offset;
                     f = Math.round(f * 1000) / 1000;
                     adapter.setState(adapter.config.ports[port].id, f, true);
-                }                                                           ///SUPER NEZINAU
+                }
                 if (adapter.config.ports[port].in == 0) {
                     adapter.setState(adapter.config.ports[port].id, value ? true : false, true);
                 }
@@ -1588,15 +1589,15 @@ function syncObjects() {
             }
             } else
             if (p >= 10) {
-            adapter.config.ports[p].in = parseInt(adapter.config.ports[p].in, 10) || 0;       ////NAUJAS
+            adapter.config.ports[p].in = parseInt(adapter.config.ports[p].in, 10) || 0;
             if (adapter.config.ports[p].pm !== undefined) {
-                adapter.config.ports[p].pm = parseInt(adapter.config.ports[p].pm, 10) || 0;      ////NAUJAS
+                adapter.config.ports[p].pm = parseInt(adapter.config.ports[p].pm, 10) || 0;
             }
             if (adapter.config.ports[p].dm !== undefined) {
-                adapter.config.ports[p].dm = parseInt(adapter.config.ports[p].dm, 10) || 0;      ////NAUJAS
+                adapter.config.ports[p].dm = parseInt(adapter.config.ports[p].dm, 10) || 0;
             }
             if (adapter.config.ports[p].rm !== undefined) {
-                adapter.config.ports[p].rm = parseInt(adapter.config.ports[p].rm, 10) || 0;      ////NAUJAS
+                adapter.config.ports[p].rm = parseInt(adapter.config.ports[p].rm, 10) || 0;
             }
             }
             settings.port = p;
@@ -1678,28 +1679,6 @@ function syncObjects() {
                 };
             } else
             // output
-            /*if (settings.pty == 1) {
-                if (settings.m) {
-                    settings.factor  = parseFloat(settings.factor || 1);
-                    settings.offset  = parseFloat(settings.offset || 0);
-
-                    obj.common.write = true;
-                    obj.common.read  = true;
-                    obj.common.def   = 0;
-                    obj.common.desc  = 'P' + p + ' - digital output (PWM)';
-                    obj.common.type  = 'number';
-                    obj.common.min   = 0;
-                    obj.common.max   = 255;
-                    if (!obj.common.role) obj.common.role = 'level';
-                    obj.native.pwm = settings.pwm;
-                } else {
-                    obj.common.write = true;
-                    obj.common.read  = true;
-                    obj.common.def   = false;
-                    obj.common.desc  = 'P' + p + ' - digital output';
-                    obj.common.type  = 'boolean';
-                    if (!obj.common.role) obj.common.role = 'state';
-                }*/
             if (settings.pty == 1) {
                 obj.common.write = true;
                 obj.common.read  = true;
@@ -1758,23 +1737,7 @@ function syncObjects() {
                             type: 'state'
                         };
                     }
-                /*} else if (settings.d == 4) { // iButton
-                    obj.common.desc = 'P' + p + ' - iButton';
-                    obj.common.type = 'string';
-                    obj.common.def  = '';*/
                 }
-            /*} else
-            // internal digital temperature sensor
-            if (settings.pty == 4) {
-                obj.common.write = false;
-                obj.common.read  = true;
-                obj.common.def   = 0;
-                obj.common.min   = -30;
-                obj.common.max   = 30;
-                obj.common.unit  = '°C';
-                obj.common.desc  = 'P' + p + ' - temperature';
-                obj.common.type  = 'number';
-                if (!obj.common.role) obj.common.role = 'value.temperature';*/
             } else
             // output PWM
             if (settings.pty == 4) {
@@ -1873,7 +1836,7 @@ function syncObjects() {
                 obj.common.type  = 'number';
                 if (!obj.common.role) obj.common.role = 'level';
             } else
-             // output SL
+            // output SL
             if (settings.pty == 8) {
                 obj.common.write = false;
                 obj.common.read  = true;
@@ -1882,7 +1845,7 @@ function syncObjects() {
                 obj.common.type  = 'boolean';
                 if (!obj.common.role) obj.common.role = 'state';
             } else
-            // input MCP                    ////NAUJAS
+            // input MCP
             if (settings.in == 1) {
                 obj.common.write = false;
                 obj.common.read  = true;
@@ -1927,22 +1890,8 @@ function syncObjects() {
                     };
                     if (obj2.native.long !== undefined) delete obj2.native.long;
                 }
-                /*obj3 = {
-                    _id: adapter.namespace + '.' + id + '_counter',
-                    common: {
-                        name:  obj.common.name + '_counter',
-                        role:  'state',
-                        write: true,
-                        read:  true,
-                        def:   0,
-                        desc:  'P' + p + ' - inputs counter',
-                        type:  'number'
-                    },
-                    native: JSON.parse(JSON.stringify(settings)),
-                    type:   'state'
-                };*/
             } else
-            // output MCP                                 /////NAUJAS
+            // output MCP
             if (settings.in == 0) {
                 obj.common.write = true;
                 obj.common.read  = true;
