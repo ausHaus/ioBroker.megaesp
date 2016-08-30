@@ -163,6 +163,9 @@ function processMessage(message) {
         if (!adapter.config.ports[port].pty && adapter.config.ports[port].m != 1) {
             adapter.config.ports[port].value = !adapter.config.ports[port].m ? 1 : 0;
             processClick(port);
+        } else if (!adapter.config.ports[port].in && adapter.config.ports[port].pm != 1) {
+            adapter.config.ports[port].value = !adapter.config.ports[port].pm ? 1 : 0;
+            processClick(port);
         /*} else if (adapter.config.ports[port].pty == 3 && adapter.config.ports[port].d == 4) {
             // process iButton
             adapter.setState(adapter.config.ports[port].id, message.val, true);*/
@@ -948,7 +951,7 @@ function getPortsState(ip, password, callback) {
     });
 }
 
-function getInternalTemp(ip, password, callback) {
+/*function getInternalTemp(ip, password, callback) {
     //http://192.168.0.14/sec/?tget=1
     if (typeof ip == 'function') {
         callback = ip;
@@ -994,7 +997,7 @@ function getInternalTemp(ip, password, callback) {
         adapter.log.warn('Got error by request to ' + ip + ': ' + e.message);
         callback(e.message);
     });
-}
+}*/
 
 function processClick(port) {
     var config = adapter.config.ports[port];
@@ -1178,7 +1181,8 @@ function processPortState(_port, value) {
         if (value !== _ports[_port].value || _ports[_port].q != q || (secondary !== null && _ports[_port].secondary != secondary)) {
             _ports[_port].oldValue = _ports[_port].value;
 
-            if (!_ports[_port].pty) {
+            ///if (!_ports[_port].pty) {
+            if (_ports[_port].pty == 0) {
                 if (value !== _ports[_port].value || _ports[_port].q != q) {
                     _ports[_port].value = value;
                     processClick(_port);
@@ -1234,6 +1238,18 @@ function processPortState(_port, value) {
             if (_ports[_port].pty == 8) {
                 adapter.log.debug('detected new value on port [' + _port + ']: ' + (value ? true : false));
                 adapter.setState(_ports[_port].id, {val: value ? true : false, ack: true, q: q});
+            } else // output MCP
+            if (_ports[_port].in == 0) {
+                adapter.log.debug('detected new value on port [' + _port + ']: ' + (value ? true : false));
+                adapter.setState(_ports[_port].id, {val: value ? true : false, ack: true, q: q});
+            } else // input MCP
+            if (_ports[_port].in == 1) {
+                if (value !== _ports[_port].value || _ports[_port].q != q) {
+                    _ports[_port].value = value;
+                    processClick(_port);
+                }
+                ////adapter.log.debug('detected new value on port [' + _port + ']: ' + (value ? true : false));
+                ////adapter.setState(_ports[_port].id, {val: value ? true : false, ack: true, q: q});
             }
 
             _ports[_port].value    = value;
@@ -1416,6 +1432,9 @@ function sendCommand(port, value) {
                     var f = value * adapter.config.ports[port].factor + adapter.config.ports[port].offset;
                     f = Math.round(f * 1000) / 1000;
                     adapter.setState(adapter.config.ports[port].id, f, true);
+                }                                                           ///SUPER NEZINAU
+                if (adapter.config.ports[port].in == 0) {
+                    adapter.setState(adapter.config.ports[port].id, value ? true : false, true);
                 }
             } else {
                 adapter.log.warn('Unknown port ' + port);
@@ -1550,6 +1569,7 @@ function syncObjects() {
                 id += '_' + settings.name.replace(/[\s.]/g, '_');
             }
             adapter.config.ports[p].id  = adapter.namespace + '.' + id;
+            if (p == 0 || p == 1 || p == 2 || p == 3 || p == 4 || p == 5 || p == 6 || p == 7 || p == 8 || p == 9) {
             adapter.config.ports[p].pty = parseInt(adapter.config.ports[p].pty, 10) || 0;
             if (adapter.config.ports[p].m !== undefined) {
                 adapter.config.ports[p].m = parseInt(adapter.config.ports[p].m, 10) || 0;
@@ -1565,6 +1585,19 @@ function syncObjects() {
             }
             if (adapter.config.ports[p].tr !== undefined) {
                 adapter.config.ports[p].tr = parseInt(adapter.config.ports[p].tr, 10) || 0;
+            }
+            } else
+            if (p >= 10) {
+            adapter.config.ports[p].in = parseInt(adapter.config.ports[p].in, 10) || 0;       ////NAUJAS
+            if (adapter.config.ports[p].pm !== undefined) {
+                adapter.config.ports[p].pm = parseInt(adapter.config.ports[p].pm, 10) || 0;      ////NAUJAS
+            }
+            if (adapter.config.ports[p].dm !== undefined) {
+                adapter.config.ports[p].dm = parseInt(adapter.config.ports[p].dm, 10) || 0;      ////NAUJAS
+            }
+            if (adapter.config.ports[p].rm !== undefined) {
+                adapter.config.ports[p].rm = parseInt(adapter.config.ports[p].rm, 10) || 0;      ////NAUJAS
+            }
             }
             settings.port = p;
 
@@ -1583,7 +1616,8 @@ function syncObjects() {
             var obj4 = null;
 
             // input
-            if (!settings.pty) {
+            ///if (!settings.pty) {
+            if (settings.pty == 0) {
                 obj.common.write = false;
                 obj.common.read  = true;
                 obj.common.def   = false;
@@ -1838,15 +1872,84 @@ function syncObjects() {
                 obj.common.desc  = 'P' + p + ' - digital output (I2C_SCL)';
                 obj.common.type  = 'number';
                 if (!obj.common.role) obj.common.role = 'level';
-             } else
+            } else
              // output SL
-             if (settings.pty == 8) {
+            if (settings.pty == 8) {
                 obj.common.write = false;
                 obj.common.read  = true;
                 obj.common.def   = false;
                 obj.common.desc  = 'P' + p + ' - digital output';
                 obj.common.type  = 'boolean';
-                if (!obj.common.role) obj.common.role = 'state'; 
+                if (!obj.common.role) obj.common.role = 'state';
+            } else
+            // input MCP                    ////NAUJAS
+            if (settings.in == 1) {
+                obj.common.write = false;
+                obj.common.read  = true;
+                obj.common.def   = false;
+                obj.common.desc  = 'P' + p + ' - digital input';
+                obj.common.type  = 'boolean';
+                if (!obj.common.role) obj.common.role = 'state';
+
+                if (settings.pm == 1) {
+                    if (settings.long && adapter.config.longPress) {
+                        obj1 = {
+                            _id: adapter.namespace + '.' + id + '_long',
+                            common: {
+                                name:  obj.common.name + '_long',
+                                role:  'state',
+                                write: false,
+                                read:  true,
+                                def:   false,
+                                desc:  'P' + p + ' - long press',
+                                type:  'boolean'
+                            },
+                            native: JSON.parse(JSON.stringify(settings)),
+                            type: 'state'
+                        };
+                        if (obj1.native.double !== undefined) delete obj1.native.double;
+                    }
+                }
+                if (settings.double && adapter.config.doublePress) {
+                    obj2 = {
+                        _id: adapter.namespace + '.' + id + '_double',
+                        common: {
+                            name:  obj.common.name + '_double',
+                            role:  'state',
+                            write: false,
+                            read:  true,
+                            def:   false,
+                            desc:  'P' + p + ' - double press',
+                            type:  'boolean'
+                        },
+                        native: JSON.parse(JSON.stringify(settings)),
+                        type:   'state'
+                    };
+                    if (obj2.native.long !== undefined) delete obj2.native.long;
+                }
+                /*obj3 = {
+                    _id: adapter.namespace + '.' + id + '_counter',
+                    common: {
+                        name:  obj.common.name + '_counter',
+                        role:  'state',
+                        write: true,
+                        read:  true,
+                        def:   0,
+                        desc:  'P' + p + ' - inputs counter',
+                        type:  'number'
+                    },
+                    native: JSON.parse(JSON.stringify(settings)),
+                    type:   'state'
+                };*/
+            } else
+            // output MCP                                 /////NAUJAS
+            if (settings.in == 0) {
+                obj.common.write = true;
+                obj.common.read  = true;
+                obj.common.def   = false;
+                obj.common.desc  = 'P' + p + ' - digital output';
+                obj.common.type  = 'boolean';
+                if (!obj.common.role) obj.common.role = 'state';
             } else {
                 continue;
             }
