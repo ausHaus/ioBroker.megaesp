@@ -276,7 +276,7 @@
         // acm(Action) MCP
         if (portSettings.in == 1) {
             // acm(Action)
-            text += _('Action:') + ' <input class="tvalue" data-type="am" type="text" data-port="' + index + '" value="' + (portSettings.am || '') + '"  style="width: 700px" maxsize="18"/>';
+            text += _('Action:') + ' <input class="tvalue" data-type="am" type="text" data-port="' + index + '" value="' + (portSettings.am || '') + '"  style="width: 70px" maxsize="18"/>';
         }
 
         //d(default state)
@@ -578,9 +578,9 @@
                 if (ports[index].long   === undefined) ports[index].long   = true;
                 if (ports[index].double === undefined) ports[index].double = true;
 
-                if (ports[index].am    === undefined) ports[index].am = '';
+                if (ports[index].am     === undefined) ports[index].am = '';
                 if (ports[index].rm     === undefined) ports[index].rm = 0;
-                if (ports[index].pm      === undefined) ports[index].pm = 0;
+                if (ports[index].pm     === undefined) ports[index].pm = 0;
                 if (ports[index].pm > 2) ports[index].pm = 0;
 
                 if (ports[index].pm != 1) ports[index].long = false;
@@ -621,6 +621,8 @@
                 if (ports[index].adc    !== undefined) delete ports[index].adc;
             }
             showPorts();
+        }
+        onchange();
     }
 
     function onDelete() {
