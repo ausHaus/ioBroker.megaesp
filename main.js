@@ -1429,7 +1429,7 @@ function sendCommand(port, value) {
                     adapter.setState(adapter.config.ports[port].id, value ? true : false, true);
                 }    
                 ////} else {
-                if (!adapter.config.ports[port].pty == 4) {     ////NAUJAS
+                if (adapter.config.ports[port].pty == 4) {     ////NAUJAS
                     var f = value * adapter.config.ports[port].factor + adapter.config.ports[port].offset;
                     f = Math.round(f * 1000) / 1000;
                     adapter.setState(adapter.config.ports[port].id, f, true);
