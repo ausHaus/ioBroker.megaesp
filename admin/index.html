@@ -161,10 +161,10 @@
                 text += '<option value="3" '   + ((portSettings.pty == 3)   ? 'selected' : '') + '>' + _('Digital Sensor')  + '</option>';
             }
             if (index == 7) {
-                text += '<option value="6" '   + ((portSettings.pty == 6)   ? 'selected' : '') + '>' + _('I2C_SDA')         + '</option>';
+                text += '<option value="6" '   + ((portSettings.pty == 6)   ? 'selected' : '') + '>' + _('Bus I2C_SDA')         + '</option>';
             }
             if (index == 8) {
-                text += '<option value="7" '   + ((portSettings.pty == 7)   ? 'selected' : '') + '>' + _('I2C_SCL')         + '</option>';
+                text += '<option value="7" '   + ((portSettings.pty == 7)   ? 'selected' : '') + '>' + _('Bus I2C_SCL')         + '</option>';
             }
             if (index == 9) {
                 text += '<option value="2" '   + ((portSettings.pty == 2)   ? 'selected' : '') + '>' + _('ADC')             + '</option>';
@@ -341,7 +341,7 @@
         }
         
         if (portSettings.pty == 7) {
-            text += _('I2C bus speed:') + ' <select class="tvalue" data-type="d" data-port="' + index + '">';
+            text += _('I2C bus speed:') + ' <select class="tvalue" data-type="m" data-port="' + index + '">';
             text += '<option value="1" ' + ((portSettings.m == 1) ? 'selected' : '') + '>100</option>';
             text += '<option value="2" ' + ((portSettings.m == 2) ? 'selected' : '') + '>200</option>';
             text += '<option value="3" ' + ((portSettings.m == 3) ? 'selected' : '') + '>300</option>';
