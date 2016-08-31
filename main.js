@@ -577,7 +577,8 @@ function detectPortConfig(ip, pass, length, callback, port, result) {
         result = [];
     } else {
         port++;
-        if (port >= length) {
+        ///if (port >= length) {
+        if (port >= 10) {     ///LAIKINAI
             return callback(result);
         }
     }
