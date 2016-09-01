@@ -1004,7 +1004,8 @@ function processClick(port) {
     var config = adapter.config.ports[port];
 
     // If press_long
-    if (config.m == 1 && config.long) {
+    ///if (config.m == 1 && config.long) {
+    if ((config.m == 1 && config.long) || (config.pm == 1 && config.long)) {
         // Detect EDGE
         if (config.oldValue !== undefined && config.oldValue !== null && config.oldValue != config.value) {
             adapter.log.debug('new state detected on port [' + port + ']: ' + config.value);
@@ -1117,7 +1118,7 @@ function triggerShortPress(port) {
 
         detectDoubleClick(port);
     } else {
-        if (config.m != 1) {
+        if ((config.m != 1) || (config.m != 1)) {
             // if not first read
             if (config.oldValue === undefined || config.oldValue === null) return;
             adapter.log.debug('reported new state for port ' + port + ' - true');
