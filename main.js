@@ -28,6 +28,38 @@ var ports  = {};
 var askInternalTemp = false;
 var connected = false;
 var rgbs = {};
+var reqString = [
+   'pt=0',
+   'pt=1',
+   'pt=2',
+   'pt=3',
+   'pt=4',
+   'pt=5',
+   'pt=6',
+   'pt=7',
+   'pt=8',
+   'pt=9',
+   'mc=10',
+   'mc=11',
+   'mc=12',
+   'mc=13',
+   'mc=14',
+   'mc=15',
+   'mc=16',
+   'mc=17',
+   'mc=18',
+   'mc=19',
+   'mc=20',
+   'mc=21',
+   'mc=22',
+   'mc=23',
+   'mc=24',
+   'mc=25'
+   ///'pc=1',
+   ///'bm=1',
+   ///'be=1',
+   ///'bh=1'
+];
 
 var adapter = utils.adapter('megaesp');
 
@@ -577,8 +609,8 @@ function detectPortConfig(ip, pass, length, callback, port, result) {
         result = [];
     } else {
         port++;
-        ///if (port >= length) {
-        if (port >= 10) {     ///LAIKINAI
+        if (port >= length) {
+        ///if (port >= 10) {     ///LAIKINAI
             return callback(result);
         }
     }
@@ -587,7 +619,9 @@ function detectPortConfig(ip, pass, length, callback, port, result) {
     var options = {
         host: parts[0],
         port: parts[1] || 80,
-        path: '/' + pass + '/?pt=' + port
+        ///path: '/' + pass + '/?pt=' + port
+        ///path: '/' + pass + '/?' + reqString[port] + port
+        path: '/' + pass + '/?' + reqString[port]
     };
 
     adapter.log.info('read config from port: http://' + ip + options.path);
