@@ -781,7 +781,7 @@ function detectDeviceConfig(ip, pass, callback) {
 function detectPorts(obj) {
     var ip;
     var password;
-    if (obj && obj.message && typeof obj.message == 'object') {
+    if (obj && obj.message && typeof obj.message === 'object') {
         ip       = obj.message.ip;
         password = obj.message.password;
     } else {
@@ -789,25 +789,47 @@ function detectPorts(obj) {
         password = adapter.config.password;
     }
     if (ip && ip !== '0.0.0.0') {
-        request('http://' + ip + '/' + password, function (error, response, body) {
-            if (!error && response.statusCode == 200) {
-                var m = body.match(/<a href="\/([^"]+)"/g);
-                var ports = [];
-                if (m) {
-                    for (var p = 0; p < m.length; p++) {
-                        // skip config
-                        if (m[p].indexOf('cfg/') !== -1) continue;
+		var parts = ip.split(':');
+		var options = {
+			host: parts[0],
+			port: parts[1] || 80,
+			path: '/' + password'
+		};
+		//'http://' + ip + '/' + password
+		http.get(options, function (res) {
+			res.setEncoding('utf8');
+			var data = '';
+			res.on('data', function (chunk) {
+				data += chunk;
+			});
+			res.on('end', function () {
+				if (res.statusCode != 200) {
+					adapter.log.warn('Response code: ' + res.statusCode + ' - ' + data);
+				} else {
+					adapter.log.debug('Response: ' + data);
+					if (!error && response.statusCode == 200) {
+					var m = body.match(/<a href="\/([^"]+)"/g);
+					var ports = [];
+					if (m) {
+						for (var p = 0; p < m.length; p++) {
+							// skip config
+							if (m[p].indexOf('cfg/') !== -1) continue;
 
-                        ports.push(m[p].substring(12 + password.length, m[p].length - 1));
-                    }
-                }
-            }
-            detectPortConfig(ip, password, ports, function (result) {
-                detectDeviceConfig(ip, password, function (error, devConfig) {
-                    if (obj.callback) adapter.sendTo(obj.from, obj.command, {error: err, response: response, ports: result, config: devConfig}, obj.callback);
-                });
-            });
-        });
+							ports.push(m[p].substring(12 + password.length, m[p].length - 1));
+						}
+					}
+					setTimeout(function () {
+						detectPortConfig(ip, password, ports, function (result) {
+							detectDeviceConfig(ip, password, function (error, devConfig) {
+								if (obj.callback) adapter.sendTo(obj.from, obj.command, {error: err, response: response, ports: result, config: devConfig}, obj.callback);
+							});
+						});
+					}, 100);
+				}
+			});
+		}).on('error', function (err) {
+			if (obj.callback) adapter.sendTo(obj.from, obj.command, {error: err}, obj.callback);
+		});
     } else {
         if (obj.callback) adapter.sendTo(obj.from, obj.command, {error: 'invalid address'}, obj.callback);
     }
