@@ -1654,7 +1654,7 @@ function syncObjects() {
 
             // input
             ///if (!settings.pty) {
-            if (settings.pty == 0) {
+            if (settings.pty === 0) {
                 obj.common.write = false;
                 obj.common.read  = true;
                 obj.common.def   = false;
@@ -1715,7 +1715,7 @@ function syncObjects() {
                 };
             } else
             // output
-            if (settings.pty == 1) {
+            if (settings.pty === 1) {
                 obj.common.write = true;
                 obj.common.read  = true;
                 obj.common.def   = false;
@@ -1724,7 +1724,7 @@ function syncObjects() {
                 if (!obj.common.role) obj.common.role = 'state';
             } else
             // analog ADC
-            if (settings.pty == 2) {
+            if (settings.pty === 2) {
                 settings.factor  = parseFloat(settings.factor || 1);
                 settings.offset  = parseFloat(settings.offset || 0);
 
@@ -1739,7 +1739,7 @@ function syncObjects() {
                 obj.native.threshold = settings.offset + settings.factor * settings.adc;
             } else
             // digital temperature sensor
-            if (settings.pty == 3) {
+            if (settings.pty === 3) {
                 obj.common.write = false;
                 obj.common.read  = true;
                 obj.common.def   = 0;
@@ -1776,7 +1776,7 @@ function syncObjects() {
                 }
             } else
             // output PWM
-            if (settings.pty == 4) {
+            if (settings.pty === 4) {
                 settings.factor  = parseFloat(settings.factor || 1);
                 settings.offset  = parseFloat(settings.offset || 0);
 
@@ -1791,7 +1791,7 @@ function syncObjects() {
                 obj.native.pwm = settings.pwm;
             } else
             // WS281x
-            if (settings.pty == 5) {
+            if (settings.pty === 5) {
                 obj.common.write = false;
                 obj.common.read  = false;
                 obj.common.def   = 0;
@@ -1856,7 +1856,7 @@ function syncObjects() {
                 };
             } else
             //I2C
-            if (settings.pty == 6) {
+            if (settings.pty === 6) {
                 obj.common.write = true;
                 obj.common.read  = true;
                 obj.common.def   = 0;
@@ -1864,7 +1864,7 @@ function syncObjects() {
                 obj.common.type  = 'number';
                 if (!obj.common.role) obj.common.role = 'level';
             } else
-            if (settings.pty == 7) {
+            if (settings.pty === 7) {
                 obj.common.write = true;
                 obj.common.read  = true;
                 obj.common.def   = 0;
@@ -1873,7 +1873,7 @@ function syncObjects() {
                 if (!obj.common.role) obj.common.role = 'level';
             } else
             // output SL
-            if (settings.pty == 8) {
+            if (settings.pty === 8) {
                 obj.common.write = false;
                 obj.common.read  = true;
                 obj.common.def   = false;
@@ -1882,7 +1882,7 @@ function syncObjects() {
                 if (!obj.common.role) obj.common.role = 'state';
             } else
             // input MCP
-            if (settings.in == 1) {
+            if (settings.in === 1) {
                 obj.common.write = false;
                 obj.common.read  = true;
                 obj.common.def   = false;
@@ -1928,7 +1928,7 @@ function syncObjects() {
                 }
             } else
             // output MCP
-            if (settings.in == 0) {
+            if (settings.in === 0) {
                 obj.common.write = true;
                 obj.common.read  = true;
                 obj.common.def   = false;
