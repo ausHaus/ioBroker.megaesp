@@ -808,30 +808,27 @@ function detectPorts(obj) {
                     if (obj.callback) adapter.sendTo(obj.from, obj.command, {error: res.statusCode + ' - ' + data}, obj.callback);
 				} else {
                     adapter.log.debug('Response: ' + data);
-                    if (!error && response.statusCode == 200) {
-                        var m = body.match(/<a href="\/([^"]+)"/g);
-                        var ports = [];
-                        if (m) {
-                            for (var p = 0; p < m.length; p++) {
-                                // skip config
-                                if (m[p].indexOf('cfg/') !== -1) continue;
+                    var m = data.match(/<a href="\/([^"]+)"/g);
+                    var ports = [];
+                    if (m) {
+                        for (var p = 0; p < m.length; p++) {
+                            // skip config
+                            if (m[p].indexOf('cfg/') !== -1) continue;
 
-                                ports.push(m[p].substring(12 + password.length, m[p].length - 1));
-                            }
+                            ports.push(m[p].substring(12 + password.length, m[p].length - 1));
                         }
-                        setTimeout(function () {
-                            detectPortConfig(ip, password, ports, function (result) {
-                                detectDeviceConfig(ip, password, function (error, devConfig) {
-                                    if (obj.callback) adapter.sendTo(obj.from, obj.command, {
-                                        error: err,
-                                        response: response,
-                                        ports: result,
-                                        config: devConfig
-                                    }, obj.callback);
-                                });
-                            });
-                        }, 100);
                     }
+                    setTimeout(function () {
+                        detectPortConfig(ip, password, ports, function (result) {
+                            detectDeviceConfig(ip, password, function (error, devConfig) {
+                                if (obj.callback) adapter.sendTo(obj.from, obj.command, {
+                                    error:      error,
+                                    ports:      result,
+                                    config:     devConfig
+                                }, obj.callback);
+                            });
+                        });
+                    }, 100);
                 }
 			});
 		}).on('error', function (err) {
