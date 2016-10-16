@@ -516,10 +516,11 @@ function writeConfigDevice(ip, pass, config, callback) {
         host: parts[0],
         port: parts[1] || 80,
         ///path: '/' + pass + '/?cf=1'        ///http://192.168.1.20/sec/cfg/?pin=123&nm=1&eip=192.168.1.19
-        path: '/' + pass + '/cfg/?pin=123&nm=1'
+        //path: '/' + pass + '/cfg/?pin=123&nm=1'
+	path: '/' + pass + '/cfg/?pin=123'
     };
 
-    if (config.eip !== undefined && config.eip != ip)   options.path += '&eip=' + config.eip;
+    if (config.eip !== undefined && config.eip != ip)   options.path += '&nm=1&eip=' + config.eip;
     if (config.pwd !== undefined && config.pwd != pass) options.path += '&pwd=' + config.pwd;
 
     if (config.eip === undefined && config.pwd === undefined) {
