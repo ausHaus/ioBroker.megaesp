@@ -4,7 +4,7 @@
   "description": "Lets control the Mega-ESP over ethernet (http://ab-log.ru/forum/viewtopic.php?f=1&t=1130) from ioBroker",
   "author": {
     "name": "ausHaus",
-    "email": "aushaus@gmail.com"
+    "email": "teshaus@gmail.com"
   },
   "homepage": "https://github.com/ausHaus/ioBroker.megaesp",
   "keywords": [
