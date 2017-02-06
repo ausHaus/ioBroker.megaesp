@@ -57,6 +57,7 @@
         "Output PWM":           {"en": "Output PWM",            "de": "Output PWM",                 "ru": "Циф. выход PWM"},
         "ADC":                  {"en": "Analog in (ADC)",       "de": "Analog in (ADC)",            "ru": "Ан. вход (ADC)"},
         "WS281x":               {"en": "WS281x",                "de": "WS281x",                     "ru": "WS281x"},
+        "DSenBUS":              {"en": "DSenBUS",               "de": "DSenBUS",                    "ru": "DSenBUS"},
         "Digital Sensor":       {"en": "Digital Sensor",        "de": "Digital Sensor",             "ru": "Циф. датчик"},
         "Bus I2C_SDA":          {"en": "Bus I2C_SDA",           "de": "Bus I2C_SDA",                "ru": "Шина I2C_SDA"},
         "Bus I2C_SCL":          {"en": "Bus I2C_SCL",           "de": "Bus I2C_SCL",                "ru": "Шина I2C_SCL"},
@@ -66,6 +67,7 @@
         "modifier":             {"en": "modifier",              "de": "modifier",                   "ru": "модификатор"},
         "Action:":              {"en": "Action:",               "de": "Aktion:",                    "ru": "Сценарий:"},
         "Net:":                 {"en": "Net:",                  "de": "Net:",                       "ru": "Сетевой сценарий:"},
+        "Mqtt:":                {"en": "Mqtt:",                 "de": "Mqtt:",                      "ru": "Mqtt сценарий:"},
         "Long:":                {"en": "Long:",                 "de": "Lang-Click:",                "ru": "Долгое нажатие:"},
         "Double:":              {"en": "Double:",               "de": "Double-Click:",              "ru": "Двойное нажатие:"},
         "not monitored":        {"en": "not monitored",         "de": "nicht beobachtet",           "ru": "не наблюдать"},
@@ -83,12 +85,14 @@
         "Net":                  {"en": "Net",                   "de": "Net",                        "ru": "Net"},
         "Net & Act":            {"en": "Net & Act",             "de": "Net & Act",                  "ru": "Net & Act"},
         "Net > Act":            {"en": "Net > Act",             "de": "Net > Act",                  "ru": "Net > Act"},
+        "Act & Mqtt":           {"en": "Act & Mqtt",            "de": "Act & Mqtt",                 "ru": "Act & Mqtt"},
         "Offset:":              {"en": "Offset:",               "de": "Offset:",                    "ru": "Сдвиг:"},
         "Factor:":              {"en": "Factor:",               "de": "Faktor:",                    "ru": "Множитель:"},
         "Period:":              {"en": "Period:",               "de": "Periode:",                   "ru": "Период:"},
         "I2C bus speed:":       {"en": "I2C bus speed:",        "de": "I2C bus geschwindigkeit:",   "ru": "Скорость шины I2C:"},
         "DHT11":                {"en": "DHT11",                 "de": "DHT11",                      "ru": "DHT11"},
         "DHT22":                {"en": "DHT22",                 "de": "DHT22",                      "ru": "DHT22"},
+        "1W":                   {"en": "1W",                    "de": "1W",                         "ru": "1W"},
         "PWM":                  {"en": "PWM",                   "de": "PWM",                        "ru": "ШИМ"},
         "Default state:":       {"en": "Default state:",        "de": "Default Zustand:",           "ru": "По умолчанию:"},
         "off":                  {"en": "off",                   "de": "off",                        "ru": "выкл"},
@@ -271,7 +275,11 @@
             // acm(Action)
             text += _('Action:') + ' <input class="tvalue" data-type="acm" type="text" data-port="' + index + '" value="' + (portSettings.acm || '') + '"  style="width: 70px" maxsize="18"/>';
             // ecm(Net action)
-            text += _('Net:') + ' <input class="tvalue" data-type="ecm" type="text" data-port="' + index + '" value="' + portSettings.ecm  + '" style="width: 70px" maxsize="35"/>';
+            if ((portSettings.pty == 0 || portSettings.pty == 2 || (portSettings.pty == 3 && (portSettings.d != 1 || portSettings.d != 2 || portSettings.d != 3))) && portSettings.tr == 5) {
+                text += _('Mqtt:') + ' <input class="tvalue" data-type="mcm" type="text" data-port="' + index + '" value="' + (portSettings.mcm || '') + '" style="width: 70px" maxsize="25"/>';
+            } else {
+                text += _('Net:') + ' <input class="tvalue" data-type="ecm" type="text" data-port="' + index + '" value="' + portSettings.ecm  + '" style="width: 70px" maxsize="35"/>';
+            } 
         }
         // acm(Action) MCP
         if (portSettings.in == 1) {
@@ -308,7 +316,7 @@
             text += '<option value="0" ' + ((portSettings.d == 0) ? 'selected' : '') + '>' + _('none') + '</option>';
             text += '<option value="1" ' + ((portSettings.d == 1) ? 'selected' : '') + '>DHT11</option>';
             text += '<option value="2" ' + ((portSettings.d == 2) ? 'selected' : '') + '>DHT22</option>';
-            text += '<option value="3" ' + ((portSettings.d == 3) ? 'selected' : '') + '>1 wire</option>';
+            text += '<option value="3" ' + ((portSettings.d == 3) ? 'selected' : '') + '>1W</option>';
             text += '</select>';
         }
         //pwm
@@ -324,6 +332,7 @@
             text += '<option value="2" ' + ((portSettings.tr == 2) ? 'selected' : '') + '>Net</option>';
             text += '<option value="3" ' + ((portSettings.tr == 3) ? 'selected' : '') + '>Net & Act</option>';
             text += '<option value="4" ' + ((portSettings.tr == 4) ? 'selected' : '') + '>Net > Act</option>';
+            text += '<option value="5" ' + ((portSettings.tr == 5) ? 'selected' : '') + '>Act & Mqtt</option>';
             text += '</select>';
         }
         if (portSettings.in == 1) {
@@ -433,6 +442,7 @@
 
                 if (ports[index].ecm    === undefined) ports[index].ecm = '';
                 if (ports[index].acm    === undefined) ports[index].acm = '';
+                if (ports[index].mcm    === undefined) ports[index].mcm = '';
                 if (ports[index].tr     === undefined) ports[index].tr = 0;
                 if (ports[index].m      === undefined) ports[index].m = 0;
                 if (ports[index].m > 3) ports[index].m = 0;
@@ -447,6 +457,7 @@
 
                 if (ports[index].ecm    !== undefined) delete ports[index].ecm;
                 if (ports[index].acm    !== undefined) delete ports[index].acm;
+                if (ports[index].mcm    !== undefined) delete ports[index].mcm;
                 if (ports[index].d      === undefined) ports[index].d = 0;
                 if (ports[index].misc   !== undefined) delete ports[index].misc;
             } else
@@ -458,9 +469,10 @@
 
                 if (ports[index].ecm    === undefined) ports[index].ecm  = '';
                 if (ports[index].acm    === undefined) ports[index].acm  = '';
+                if (ports[index].mcm    === undefined) ports[index].mcm = '';
                 if (ports[index].d      === undefined) ports[index].d = 0;
                 if (ports[index].adc    === undefined) ports[index].adc  = 0;
-                if (ports[index].tr     === undefined) ports[index].tr  = '';
+                if (ports[index].tr     === undefined) ports[index].tr  = 0;
                 ///if (ports[index].m      === undefined) ports[index].m = 0;
                 if (ports[index].m      === undefined) ports[index].m = '';
             } else
@@ -472,6 +484,7 @@
 
                 if (ports[index].ecm    === undefined) ports[index].ecm  = '';
                 if (ports[index].acm    === undefined) ports[index].acm  = '';
+                if (ports[index].mcm    === undefined) ports[index].mcm = '';
                 if (ports[index].tr     === undefined) ports[index].tr  = 0;
                 ///if (ports[index].d      === undefined) ports[index].d = 1;
                 if (ports[index].d      === undefined) ports[index].d = '';
@@ -493,6 +506,7 @@
 
                 if (ports[index].ecm    !== undefined) delete ports[index].ecm;
                 if (ports[index].acm    !== undefined) delete ports[index].acm;
+                if (ports[index].mcm    !== undefined) delete ports[index].mcm;
                 if (ports[index].d      === undefined) ports[index].d = 0;
                 if (ports[index].pwm    === undefined) ports[index].pwm = 0;
                 if (ports[index].misc   !== undefined) delete ports[index].misc;
@@ -505,6 +519,7 @@
 
                 if (ports[index].ecm    !== undefined) delete ports[index].ecm;
                 if (ports[index].acm    !== undefined) delete ports[index].acm;
+                if (ports[index].mcm    !== undefined) delete ports[index].mcm;
                 if (ports[index].pix    === undefined) ports[index].pix = 0;
                 if (ports[index].misc   !== undefined) delete ports[index].misc;
                 ////if (ports[index].r      === undefined) ports[index].r = '';
@@ -519,6 +534,7 @@
 
                 if (ports[index].ecm    !== undefined) delete ports[index].ecm;
                 if (ports[index].acm    !== undefined) delete ports[index].acm;
+                if (ports[index].mcm    !== undefined) delete ports[index].mcm;
                 ////if (ports[index].d      === undefined) ports[index].d = 0;
                 if (ports[index].misc   !== undefined) delete ports[index].misc;
                 ////if (ports[index].m      === undefined) ports[index].m = 0;
@@ -532,6 +548,7 @@
 
                 if (ports[index].ecm    !== undefined) delete ports[index].ecm;
                 if (ports[index].acm    !== undefined) delete ports[index].acm;
+                if (ports[index].mcm    !== undefined) delete ports[index].mcm;
                 ////if (ports[index].d      === undefined) ports[index].d = 0;
                 if (ports[index].misc   !== undefined) delete ports[index].misc;
                 if (ports[index].m      === undefined) ports[index].m = '';
@@ -545,6 +562,7 @@
 
                 if (ports[index].ecm    !== undefined) delete ports[index].ecm;
                 if (ports[index].acm    !== undefined) delete ports[index].acm;
+                if (ports[index].mcm    !== undefined) delete ports[index].mcm;
                 if (ports[index].d      === undefined) ports[index].d = 255;
                 if (ports[index].misc   !== undefined) delete ports[index].misc;
                 if (ports[index].m      === undefined) ports[index].m = 0;
@@ -557,6 +575,7 @@
 
                 if (ports[index].ecm    !== undefined) delete ports[index].ecm;
                 if (ports[index].acm    !== undefined) delete ports[index].acm;
+                if (ports[index].mcm    !== undefined) delete ports[index].mcm;
                 if (ports[index].d      !== undefined) delete ports[index].d;
                 if (ports[index].misc   !== undefined) delete ports[index].misc;
                 if (ports[index].m      !== undefined) delete ports[index].m;
