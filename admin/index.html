@@ -98,8 +98,13 @@
         "off":                  {"en": "off",                   "de": "off",                        "ru": "выкл"},
         "on":                   {"en": "on",                    "de": "on",                         "ru": "вкл"},
         "Threshold:":           {"en": "Threshold:",            "de": "Schwellwert:",               "ru": "Порог:"},
+        "Hysteresis:":          {"en": "Hysteresis:",           "de": "Hysterese:",                 "ru": "Гистерезис:"},
+        " * 0,1":               {"en": " * 0,1",                "de": " * 0,1",                     "ru": " * 0,1"},
         " * 0,1s":              {"en": " * 0,1s",               "de": " * 0,1s",                    "ru": " * 0,1сек."},
         "Count:":               {"en": "Count:",                "de": "Count:",                     "ru": "Count:"},
+        "Mast:":                {"en": "Mast:",                 "de": "Mast:",                      "ru": "Mast:"},
+        "Mod:":                 {"en": "Mod:",                  "de": "Mod:",                       "ru": "Mod:"},
+        "Same":                 {"en": "Same",                  "de": "Same",                       "ru": "Same"},
         "Change ip or password": {
             "en": "Change ip or password",
             "de": "IP Adresse oder Kennwort ändern",
@@ -386,10 +391,12 @@
         ////if ((portSettings.pty == 2 && portSettings.m != 0) || (portSettings.pty == 3 && (portSettings.d != 1 || portSettings.d != 2 || portSettings.d != 3))) {
         if (portSettings.pty == 3 && portSettings.d != 0 && portSettings.m != 0) {     
             text += _('Threshold:') + ' <input class="tvalue" data-type="misc" type="text"  style="width: 70px" data-port="' + index + '" value="' + (portSettings.misc || 0) + '" maxsize="3"/>';
+            text += _('Hysteresis:') + ' <input class="tvalue" data-type="hy" type="text"  style="width: 70px" data-port="' + index + '" value="' + (portSettings.hy || 0) + '" maxsize="3"/>' + _(' * 0,1');
         }
         if (portSettings.pty == 2 && portSettings.m != 0) {
         ////if (portSettings.pty == 2 && portSettings.m) {
             text += _('Threshold:') + ' <input class="tvalue" data-type="adc" type="text"  style="width: 70px" data-port="' + index + '" value="' + (portSettings.adc || 0) + '" maxsize="3"/>';
+            text += _('Hysteresis:') + ' <input class="tvalue" data-type="hy" type="text"  style="width: 70px" data-port="' + index + '" value="' + (portSettings.hy || 0) + '" maxsize="3"/>';
         }
 
         ///if (portSettings.pty == 2 || (portSettings.pty == 1 && portSettings.m)) {
@@ -431,7 +438,8 @@
             ports[index][attr] = $(this).val();
         }
 
-        if (attr == 'm' || attr == 'pty' || attr == 'd') {
+        ///if (attr == 'm' || attr == 'pty' || attr == 'd') {
+        if (attr == 'm' || attr == 'pty' || (ports[index].pty == 1 && attr == 'd') || (ports[index].pty == 3 && attr == 'd') || attr == 'tr') {
             // if input
             if (ports[index].pty == 0) {
                 // m: 0 - on close, 1 - on change, 2 - on open
