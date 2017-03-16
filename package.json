@@ -1,6 +1,6 @@
 {
   "name": "iobroker.megaesp",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Lets control the Mega-ESP over ethernet (http://ab-log.ru/forum/viewtopic.php?f=1&t=1130) from ioBroker",
   "author": {
     "name": "ausHaus",
@@ -9,7 +9,7 @@
   "homepage": "https://github.com/ausHaus/ioBroker.megaesp",
   "keywords": [
     "ioBroker",
-    "Mega-ESP"
+    "MegaESP"
   ],
   "repository": {
     "type": "git",
