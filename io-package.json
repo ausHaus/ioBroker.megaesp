@@ -9,7 +9,7 @@
             "ru": "Позволяет управлять Mega-ESP через ethernet/интернет (http://www.ab-log.ru/forum/viewtopic.php?f=1&t=1130)"
         },
         "authors": [
-            "bluefox <bluefox@ccu.io>"
+            "aushaus <teshaus@gmail.com>"
         ],
         "license":                  "MIT",
         "platform":                 "Javascript/Node.js",
