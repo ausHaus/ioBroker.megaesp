@@ -1,7 +1,7 @@
 {
     "common": {
         "name":                     "megaesp",
-        "version":                  "0.0.5",
+        "version":                  "0.0.6",
         "title":                    "Mega-ESP Adapter",
         "desc":                     {
             "en": "Lets control the Mega-ESP over ethernet/internet (http://www.ab-log.ru/forum/viewtopic.php?f=1&t=1130)",
@@ -38,7 +38,7 @@
         "password":                 "sec",
         "longPress":                700,
         "doublePress":              600,
-        "ports":                    []
+        "ports":                    {}
     },
     "instanceObjects": [
         {

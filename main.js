@@ -27,39 +27,7 @@ var server =  null;
 var ports  = {};
 var askInternalTemp = false;
 var connected = false;
-var rgbs = {};
-var reqString = [
-   'pt=0',
-   'pt=1',
-   'pt=2',
-   'pt=3',
-   'pt=4',
-   'pt=5',
-   'pt=6',
-   'pt=7',
-   'pt=8',
-   'pt=9',
-   'mc=10',
-   'mc=11',
-   'mc=12',
-   'mc=13',
-   'mc=14',
-   'mc=15',
-   'mc=16',
-   'mc=17',
-   'mc=18',
-   'mc=19',
-   'mc=20',
-   'mc=21',
-   'mc=22',
-   'mc=23',
-   'mc=24',
-   'mc=25'
-   ///'pc=1',
-   ///'bm=1',
-   ///'be=1',
-   ///'bh=1'
-];
+var rgbs      = {};
 
 var adapter = utils.adapter('megaesp');
 
@@ -604,17 +572,12 @@ function writeConfig(obj) {
     }
 }
 
-function detectPortConfig(ip, pass, length, callback, port, result) {
-    if (port === undefined) {
-        port = 0;
-        result = [];
-    } else {
-        port++;
-        if (port >= length) {
-        ///if (port >= 10) {     ///LAIKINAI
-            return callback(result);
-        }
+function detectPortConfig(ip, pass, ports, callback, result) {
+    result = result || {};
+    if (!ports || !ports.length) {
+        return callback(result);
     }
+    var port = ports.pop();
 
     var parts = ip.split(':');
     var options = {
@@ -622,7 +585,7 @@ function detectPortConfig(ip, pass, length, callback, port, result) {
         port: parts[1] || 80,
         ///path: '/' + pass + '/?pt=' + port
         ///path: '/' + pass + '/?' + reqString[port] + port
-        path: '/' + pass + '/?' + reqString[port]
+        path: '/' + pass + '/?' + port
     };
 
     adapter.log.info('read config from port: http://' + ip + options.path);
@@ -723,16 +686,16 @@ function detectPortConfig(ip, pass, length, callback, port, result) {
                 ///if (settings.naf  !== undefined) settings.naf  = parseInt(settings.naf,  10);
                 if (settings.tr   !== undefined) settings.tr   = parseInt(settings.tr,   10);
                 if (settings.pix  !== undefined) settings.pix  = parseInt(settings.pix,  10);
-                if (settings.acm === 'ð=')      settings.acm = '';
+                if (settings.acm === 'ð=')       settings.acm  = '';
 
                 result[port] = settings;
                 adapter.log.debug('Response: ' + data);
             }
-            detectPortConfig(ip, pass, length, callback, port, result);
+            detectPortConfig(ip, pass, ports, callback, result);
         });
     }).on('error', function (err) {
         adapter.log.error(err.message);
-        detectPortConfig(ip, pass, length, callback, port, result);
+        detectPortConfig(ip, pass, ports, callback, result);
     });
 }
 
@@ -819,26 +782,59 @@ function detectDeviceConfig(ip, pass, callback) {
 function detectPorts(obj) {
     var ip;
     var password;
-    if (obj && obj.message && typeof obj.message == 'object') {
+    if (obj && obj.message && typeof obj.message === 'object') {
         ip       = obj.message.ip;
         password = obj.message.password;
     } else {
         ip       = obj ? obj.message : '';
         password = adapter.config.password;
     }
-    if (ip && ip != '0.0.0.0') {
-        getPortsState(ip, password, function (err, response) {
-            if (err || !response) {
-                if (obj.callback) adapter.sendTo(obj.from, obj.command, {error: err, response: response}, obj.callback);
-                return;
-            }
-            var parts  = response.split(';');
-            detectPortConfig(ip, password, parts.length, function (result) {
-                detectDeviceConfig(ip, password, function (error, devConfig) {
-                    if (obj.callback) adapter.sendTo(obj.from, obj.command, {error: err, response: response, ports: result, config: devConfig}, obj.callback);
-                });
-            });
-        });
+    if (ip && ip !== '0.0.0.0') {
+		var parts = ip.split(':');
+		var options = {
+			host: parts[0],
+			port: parts[1] || 80,
+			path: '/' + password
+		};
+		//'http://' + ip + '/' + password
+		http.get(options, function (res) {
+			res.setEncoding('utf8');
+			var data = '';
+			res.on('data', function (chunk) {
+				data += chunk;
+			});
+			res.on('end', function () {
+				if (res.statusCode != 200) {
+					adapter.log.warn('Response code: ' + res.statusCode + ' - ' + data);
+                    if (obj.callback) adapter.sendTo(obj.from, obj.command, {error: res.statusCode + ' - ' + data}, obj.callback);
+				} else {
+                    adapter.log.debug('Response: ' + data);
+                    var m = data.match(/<a href="\/([^"]+)"/g);
+                    var ports = [];
+                    if (m) {
+                        for (var p = 0; p < m.length; p++) {
+                            // skip config
+                            if (m[p].indexOf('cfg/') !== -1) continue;
+
+                            ports.push(m[p].substring(12 + password.length, m[p].length - 1));
+                        }
+                    }
+                    setTimeout(function () {
+                        detectPortConfig(ip, password, ports, function (result) {
+                            detectDeviceConfig(ip, password, function (error, devConfig) {
+                                if (obj.callback) adapter.sendTo(obj.from, obj.command, {
+                                    error:      error,
+                                    ports:      result,
+                                    config:     devConfig
+                                }, obj.callback);
+                            });
+                        });
+                    }, 100);
+                }
+			});
+		}).on('error', function (err) {
+			if (obj.callback) adapter.sendTo(obj.from, obj.command, {error: err}, obj.callback);
+		});
     } else {
         if (obj.callback) adapter.sendTo(obj.from, obj.command, {error: 'invalid address'}, obj.callback);
     }
@@ -913,7 +909,7 @@ function getPortState(port, callback) {
     var options = {
         host: parts[0],
         port: parts[1] || 80,
-        path: '/' + adapter.config.password + '/?pt=' + port + '&cmd=get'
+        path: '/' + adapter.config.password + '/?' + port + '&cmd=get'
     };
     adapter.log.debug('getPortState http://' + options.host + options.path);
 
@@ -1485,7 +1481,7 @@ function sendCommand(port, value) {
 
 function sendCommandToCounter(port, value) {
     //'http://192.168.0.52/sec/?pt=2&cnt=0'
-    var data = 'pt=' + port + '&cnt=' + (value || 0);
+    var data = port + '&cnt=' + (value || 0);
 
     var parts = adapter.config.ip.split(':');
 
@@ -1518,13 +1514,13 @@ function sendCommandToRGB(rgbId, R, G, B) {    //  WS281x
         var port;
         var data;
         if (R !== undefined) {
-                port = rgbId;
- 	    data = 'pt=' + port + '&r=' + (R || 0) + '&g=' + (G || 0) + '&b=' + (B || 0);
+            port = rgbId;
+ 	        data = port + '&r=' + (R || 0) + '&g=' + (G || 0) + '&b=' + (B || 0);
         } else {
  	    rgbs[rgbId].timer = null;
  	    port = ports[rgbId + '_blue'].native.port;
  	    //'http://espIP/sec/?pt=3&r=25&g=25&b=25'
- 	    data = 'pt=' + port + '&r=' + (rgbs[rgbId].red || 0) + '&g=' + (rgbs[rgbId].green || 0) + '&b=' + (rgbs[rgbId].blue || 0);
+ 	    data = port + '&r=' + (rgbs[rgbId].red || 0) + '&g=' + (rgbs[rgbId].green || 0) + '&b=' + (rgbs[rgbId].blue || 0);
         }
 
     var parts = adapter.config.ip.split(':');
@@ -1598,44 +1594,42 @@ function syncObjects() {
     var newObjects = [];
     ports = {};
     if (adapter.config.ports) {
-        for (var p = 0; p < adapter.config.ports.length; p++) {
+        for (var p in adapter.config.ports) {
             var settings = adapter.config.ports[p];
-            ///var id = (p == 14 || p == 15) ? ('a' + (p - 8)) : ('p' + p);
-            var id = (p == 9) ? ('p' + p) : ('p' + p);
+            var id = (p === 'pt=9') ? ('p' + p) : ('p' + p);
 
             if (settings.name) {
                 id += '_' + settings.name.replace(/[\s.]/g, '_');
             }
             adapter.config.ports[p].id  = adapter.namespace + '.' + id;
-            if (p == 0 || p == 1 || p == 2 || p == 3 || p == 4 || p == 5 || p == 6 || p == 7 || p == 8 || p == 9) {
-            adapter.config.ports[p].pty = parseInt(adapter.config.ports[p].pty, 10) || 0;
-            if (adapter.config.ports[p].m !== undefined) {
-                adapter.config.ports[p].m = parseInt(adapter.config.ports[p].m, 10) || 0;
-            }
-            if (adapter.config.ports[p].d !== undefined) {
-                adapter.config.ports[p].d = parseInt(adapter.config.ports[p].d, 10) || 0;
-            }
-            if (adapter.config.ports[p].misc !== undefined) {
-                adapter.config.ports[p].misc = parseInt(adapter.config.ports[p].misc, 10) || 0;
-            }
-            if (adapter.config.ports[p].adc !== undefined) {
-                adapter.config.ports[p].adc = parseInt(adapter.config.ports[p].adc, 10) || 0;
-            }
-            if (adapter.config.ports[p].tr !== undefined) {
-                adapter.config.ports[p].tr = parseInt(adapter.config.ports[p].tr, 10) || 0;
-            }
-            } else
-            if (p >= 10) {
-            adapter.config.ports[p].in = parseInt(adapter.config.ports[p].in, 10) || 0;
-            if (adapter.config.ports[p].pm !== undefined) {
-                adapter.config.ports[p].pm = parseInt(adapter.config.ports[p].pm, 10) || 0;
-            }
-            if (adapter.config.ports[p].dm !== undefined) {
-                adapter.config.ports[p].dm = parseInt(adapter.config.ports[p].dm, 10) || 0;
-            }
-            if (adapter.config.ports[p].rm !== undefined) {
-                adapter.config.ports[p].rm = parseInt(adapter.config.ports[p].rm, 10) || 0;
-            }
+            if (p.indexOf('pt=') !== -1) {
+                adapter.config.ports[p].pty = parseInt(adapter.config.ports[p].pty, 10) || 0;
+                if (adapter.config.ports[p].m !== undefined) {
+                    adapter.config.ports[p].m = parseInt(adapter.config.ports[p].m, 10) || 0;
+                }
+                if (adapter.config.ports[p].d !== undefined) {
+                    adapter.config.ports[p].d = parseInt(adapter.config.ports[p].d, 10) || 0;
+                }
+                if (adapter.config.ports[p].misc !== undefined) {
+                    adapter.config.ports[p].misc = parseInt(adapter.config.ports[p].misc, 10) || 0;
+                }
+                if (adapter.config.ports[p].adc !== undefined) {
+                    adapter.config.ports[p].adc = parseInt(adapter.config.ports[p].adc, 10) || 0;
+                }
+                if (adapter.config.ports[p].tr !== undefined) {
+                    adapter.config.ports[p].tr = parseInt(adapter.config.ports[p].tr, 10) || 0;
+                }
+            } else {
+                adapter.config.ports[p].in = parseInt(adapter.config.ports[p].in, 10) || 0;
+                if (adapter.config.ports[p].pm !== undefined) {
+                    adapter.config.ports[p].pm = parseInt(adapter.config.ports[p].pm, 10) || 0;
+                }
+                if (adapter.config.ports[p].dm !== undefined) {
+                    adapter.config.ports[p].dm = parseInt(adapter.config.ports[p].dm, 10) || 0;
+                }
+                if (adapter.config.ports[p].rm !== undefined) {
+                    adapter.config.ports[p].rm = parseInt(adapter.config.ports[p].rm, 10) || 0;
+                }
             }
             settings.port = p;
 
