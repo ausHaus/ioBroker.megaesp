@@ -32,9 +32,9 @@ Mega-ESP cannot report on other port than 80.
 
 ### Configuration
 
-- IP: IP address of Mega-ESP;
-- Mega-ESP Name: Name of the Mega-ESP to assign the port changes, e.g. "DevA". If no name set the adapter instance will be used for that;
-- Port: Listening port on ioBroker. MegaD-328 cannot send to ports other than 80. Default value: 80. 
+- IP: IP address of MegaESP;
+- Mega-ESP Name: Name of the MegaESP to assign the port changes, e.g. "DevA". If no name set the adapter instance will be used for that;
+- Port: Listening port on ioBroker. MegaESP cannot send to ports other than 80. Default value: 80. 
 - Poll interval: poll interval in seconds. All configured input ports will be polled in defined interval;
 - Password: password to access the device (max 3 characters). Default value "sec";
 
