@@ -18,7 +18,7 @@
         "icon":                     "megad.png",
         "messagebox":               true,
         "readme":                   "https://github.com/ausHaus/ioBroker.megaesp/blob/master/README.md",
-        "keywords":                 ["MegaESP", "communication"],
+        "keywords":                 ["MegaESP-8266", "communication"],
 		"enabled":                  true,
         "extIcon":                  "https://raw.githubusercontent.com/ioBroker/ioBroker.megad/master/admin/megad.png",
         "type":                     "hardware",
