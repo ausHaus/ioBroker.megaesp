@@ -33,31 +33,5 @@
   "scripts": {
     "test": "node node_modules/mocha/bin/mocha"
   },
-  "license": "MIT",
-  "gitHead": "89467dfb7d3808675d8ed7d64637d7da7a214b1e",
-  "_id": "iobroker.megaesp@0.0.6",
-  "_shasum": "e83ded5e2b0493e0422e18f80a5d294ee6079ec7",
-  "_from": "iobroker.megaesp@latest",
-  "_npmVersion": "2.14.12",
-  "_nodeVersion": "4.3.1",
-  "_npmUser": {
-    "name": "aushaus",
-    "email": "teshaus@gmail.com"
-  },
-  "dist": {
-    "shasum": "e83ded5e2b0493e0422e18f80a5d294ee6079ec7",
-    "tarball": "https://registry.npmjs.org/iobroker.megaesp/-/iobroker.megaesp-0.0.6.tgz"
-  },
-  "maintainers": [
-    {
-      "name": "aushaus",
-      "email": "teshaus@gmail.com"
-    }
-  ],
-  "_npmOperationalInternal": {
-    "host": "packages-12-west.internal.npmjs.com",
-    "tmp": "tmp/iobroker.megaesp-0.0.6.tgz_1462304486625_0.008463089121505618"
-  },
-  "directories": {},
-  "_resolved": "https://registry.npmjs.org/iobroker.megaesp/-/iobroker.megaesp-0.0.6.tgz"
+  "license": "MIT"
 }
