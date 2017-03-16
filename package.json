@@ -1,6 +1,6 @@
 {
   "name": "iobroker.megaesp",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Lets control the Mega-ESP over ethernet (http://ab-log.ru/forum/viewtopic.php?f=1&t=1130) from ioBroker",
   "author": {
     "name": "ausHaus",
@@ -35,29 +35,29 @@
   },
   "license": "MIT",
   "gitHead": "89467dfb7d3808675d8ed7d64637d7da7a214b1e",
-  "_id": "iobroker.megad@1.2.0",
+  "_id": "iobroker.megaesp@0.0.6",
   "_shasum": "e83ded5e2b0493e0422e18f80a5d294ee6079ec7",
-  "_from": "iobroker.megad@latest",
+  "_from": "iobroker.megaesp@latest",
   "_npmVersion": "2.14.12",
   "_nodeVersion": "4.3.1",
   "_npmUser": {
-    "name": "bluefox",
-    "email": "dogafox@gmail.com"
+    "name": "aushaus",
+    "email": "teshaus@gmail.com"
   },
   "dist": {
     "shasum": "e83ded5e2b0493e0422e18f80a5d294ee6079ec7",
-    "tarball": "https://registry.npmjs.org/iobroker.megad/-/iobroker.megad-1.2.0.tgz"
+    "tarball": "https://registry.npmjs.org/iobroker.megaesp/-/iobroker.megaesp-0.0.6.tgz"
   },
   "maintainers": [
     {
-      "name": "bluefox",
-      "email": "dogafox@gmail.com"
+      "name": "aushaus",
+      "email": "teshaus@gmail.com"
     }
   ],
   "_npmOperationalInternal": {
     "host": "packages-12-west.internal.npmjs.com",
-    "tmp": "tmp/iobroker.megad-1.2.0.tgz_1462304486625_0.008463089121505618"
+    "tmp": "tmp/iobroker.megaesp-0.0.6.tgz_1462304486625_0.008463089121505618"
   },
   "directories": {},
-  "_resolved": "https://registry.npmjs.org/iobroker.megad/-/iobroker.megad-1.2.0.tgz"
+  "_resolved": "https://registry.npmjs.org/iobroker.megaesp/-/iobroker.megaesp-0.0.6.tgz"
 }
