@@ -1,12 +1,12 @@
 {
     "common": {
         "name":                     "megaesp",
-        "version":                  "0.0.6",
-        "title":                    "Mega-ESP Adapter",
+        "version":                  "0.0.7",
+        "title":                    "MegaESP-8266 Adapter",
         "desc":                     {
-            "en": "Lets control the Mega-ESP over ethernet/internet (http://www.ab-log.ru/forum/viewtopic.php?f=1&t=1130)",
-            "de": "Ermöglicht die steuerung von Mega-ESP über Ethernet/Internet (http://www.ab-log.ru/forum/viewtopic.php?f=1&t=1130)",
-            "ru": "Позволяет управлять Mega-ESP через ethernet/интернет (http://www.ab-log.ru/forum/viewtopic.php?f=1&t=1130)"
+            "en": "Lets control the MegaESP-8266 over ethernet/internet (http://www.ab-log.ru/forum/viewtopic.php?f=1&t=1130)",
+            "de": "Ermöglicht die steuerung von MegaESP-8266 über Ethernet/Internet (http://www.ab-log.ru/forum/viewtopic.php?f=1&t=1130)",
+            "ru": "Позволяет управлять MegaESP-8266 через ethernet/интернет (http://www.ab-log.ru/forum/viewtopic.php?f=1&t=1130)"
         },
         "authors": [
             "aushaus <teshaus@gmail.com>"
@@ -18,7 +18,7 @@
         "icon":                     "megad.png",
         "messagebox":               true,
         "readme":                   "https://github.com/ausHaus/ioBroker.megaesp/blob/master/README.md",
-        "keywords":                 ["Mega-ESP", "communication"],
+        "keywords":                 ["MegaESP", "communication"],
 		"enabled":                  true,
         "extIcon":                  "https://raw.githubusercontent.com/ioBroker/ioBroker.megad/master/admin/megad.png",
         "type":                     "hardware",
