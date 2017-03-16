@@ -2,6 +2,12 @@
 ioBroker Mega-ESP adapter
 =================
 
+[![NPM version](http://img.shields.io/npm/v/iobroker.megaesp.svg)](https://www.npmjs.com/package/iobroker.megaesp)
+[![Downloads](https://img.shields.io/npm/dm/iobroker.megaesp.svg)](https://www.npmjs.com/package/iobroker.megaesp)
+[![Tests](https://travis-ci.org/ausHaus/ioBroker.megaesp.svg?branch=master)](https://travis-ci.org/ausHaus/ioBroker.megaesp)
+
+[![NPM](https://nodei.co/npm/iobroker.megaesp.png?downloads=true)](https://nodei.co/npm/iobroker.megaesp/)
+
 Lets control the [Mega-ESP](http://ab-log.ru/forum/viewtopic.php?f=1&t=1130) over ethernet.
 ## English 
 [по русски](#Русский)
