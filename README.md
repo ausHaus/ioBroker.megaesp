@@ -4,7 +4,6 @@ ioBroker Mega-ESP adapter
 
 [![NPM version](http://img.shields.io/npm/v/iobroker.megaesp.svg)](https://www.npmjs.com/package/iobroker.megaesp)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.megaesp.svg)](https://www.npmjs.com/package/iobroker.megaesp)
-[![Tests](https://travis-ci.org/ausHaus/ioBroker.megaesp.svg?branch=master)](https://travis-ci.org/ausHaus/ioBroker.megaesp)
 
 [![NPM](https://nodei.co/npm/iobroker.megaesp.png?downloads=true)](https://nodei.co/npm/iobroker.megaesp/)
 
@@ -67,7 +66,7 @@ MegaValue = (ioBrokerValue - offset) / factor;
 
 To get the range of the analog value from 100 to 500 set the factor as 400 and offset = 100.
 
-**The order of the ports is very important. The port in first row will be associated with P0 in MegaD-328. In row number 14 with P13.**
+**The order of the ports is very important. The port in first row will be associated with P0 in Mega-ESP. In row number 10 with P9.**
 
 -------------------
 ## Русский        
@@ -83,7 +82,7 @@ To get the range of the analog value from 100 to 500 set the factor as 400 and o
 - Интервал для длинного нажатия (мс): если отжатие после нажатия кнопки произошло позже указанного интервала, то сгенерируется длинное нажатие;
 - Интервал двойного нажатия (мс): если между нажатиями пройдет меньше указанного времени, то сгенерируется двойное нажатие;
 
-В сетевых настройках MegaD-328 можно сконфигуририровать IP-адрес ioBroker. При каждом нажатии на кнопку MegaD-328 сообщает ioBroker (restAPI) номер сработавшего входа. 
+В сетевых настройках MegaD-328 можно сконфигуририровать IP-адрес ioBroker. При каждом нажатии на кнопку Mega-ESP сообщает ioBroker (restAPI) номер сработавшего входа. 
 
 Выглядит запрос примерно следующим образом:
 ´´´http://192.168.0.250/0/?pt=7´´´
@@ -116,10 +115,13 @@ ioBrokerЗначение = MegaЗначение * Множитель + Сдви�
 
 Только аналоговые порты принимают во внимание Множитель и Сдвиг.
 
-**Порядок портов очень важен. Порт в первой колонке таблицы ассоциируется с портом P0 на MegaD-328. Порт в колонке 14 с P13.**          
+**Порядок портов очень важен. Порт в первой колонке таблицы ассоциируется с портом P0 на Mega-ESP. Порт в колонке 10 с P9.**          
          
           
 ## Changelog
+### 0.0.6 (2017-03-16)
+* (ausHaus) fix README
+
 ### 0.0.5 (2016-08-20)
 * (ausHaus) add MCP23017 in/out
 
