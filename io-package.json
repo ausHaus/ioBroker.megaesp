@@ -2,6 +2,13 @@
     "common": {
         "name":                     "megaesp",
         "version":                  "0.0.7",
+	"news": {
+            "0.0.7": {
+                "en":               "riname adapter",
+                "de":               "riname adapter",
+                "ru":               "riname adapter"
+            }
+        },
         "title":                    "MegaESP-8266 Adapter",
         "desc":                     {
             "en": "Lets control the MegaESP-8266 over ethernet/internet (http://www.ab-log.ru/forum/viewtopic.php?f=1&t=1130)",
