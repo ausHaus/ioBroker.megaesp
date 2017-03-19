@@ -1,5 +1,5 @@
 ![Logo](admin/megad.png)
-ioBroker MegaESP-8266 adapter
+ioBroker Mega-ESP adapter
 =================
 
 [![NPM version](http://img.shields.io/npm/v/iobroker.megaesp.svg)](https://www.npmjs.com/package/iobroker.megaesp)
@@ -7,7 +7,7 @@ ioBroker MegaESP-8266 adapter
 
 [![NPM](https://nodei.co/npm/iobroker.megaesp.png?downloads=true)](https://nodei.co/npm/iobroker.megaesp/)
 
-Lets control the [MegaESP-8266](http://ab-log.ru/forum/viewtopic.php?f=1&t=1130) over ethernet.
+Lets control the [Mega-ESP](http://ab-log.ru/forum/viewtopic.php?f=1&t=1130) over ethernet.
 ## English 
 [по русски](#Русский)
 
@@ -16,7 +16,7 @@ Lets control the [MegaESP-8266](http://ab-log.ru/forum/viewtopic.php?f=1&t=1130)
 ```node iobroker.js add megaesp```
 
 ### Information
-The device has 14 ports, 0-7 inputs and 8-13 outputs.
+The device has 10 ports, inputs/outputs.
 To read the state of the port call
 ```http://mega_ip/sec/?pt=4&cmd=get``` , where sec is password (max 3 chars), 4 is port number
 The result will come as "ON", "OFF" or analog value for analog ports
@@ -28,19 +28,17 @@ For digital ports only 0, 1 and 2 (toggle) are allowed, for analog ports the val
 The device can report the changes of ports to some web server in form
 ```http://ioBroker:80/?pt=6```  , where 6 is the port number
 
-Mega-ESP cannot report on other port than 80.
-
 ### Configuration
 
-- IP: IP address of MegaESP;
-- Mega-ESP Name: Name of the MegaESP to assign the port changes, e.g. "DevA". If no name set the adapter instance will be used for that;
-- Port: Listening port on ioBroker. MegaESP cannot send to ports other than 80. Default value: 80. 
+- IP: IP address of Mega-ESP;
+- Mega-ESP Name: Name of the Mega-ESP to assign the port changes, e.g. "DevA". If no name set the adapter instance will be used for that;
+- Port: Listening port on ioBroker. Default value: 80. 
 - Poll interval: poll interval in seconds. All configured input ports will be polled in defined interval;
 - Password: password to access the device (max 3 characters). Default value "sec";
 
 Mega-ESP can report about changes on some ports if configured. 
-You can configure something like that "http://ioBrokerIP/instance" on MegaESP in "Net"-Field and MegaESP will send reports like this one "http://ioBrokerIP/instance/?pt=7" to ioBroker. 
-That means the button on port 7 was pressed. ioBroker expects instance number (e.g. "0") or defined name of MegaESP (e.g. "DevA"). The "Net" field will look like: "http://192.168.0.8/0/".
+You can configure something like that "http://ioBrokerIP/instance" on MegaESP in "Net"-Field and Mega-ESP will send reports like this one "http://ioBrokerIP/instance/?pt=7" to ioBroker. 
+That means the button on port 7 was pressed. ioBroker expects instance number (e.g. "0") or defined name of Mega-ESP (e.g. "DevA"). The "Net" field will look like: "http://192.168.0.8/0/".
 
 ### Ports
 All ports, that are desired to be used must be configured in right order. Following settings must be set for every port:
@@ -74,15 +72,15 @@ To get the range of the analog value from 100 to 500 set the factor as 400 and o
     
 ### Настройки
 
-- IP Адрес устройства: IP адрес MegaESP;
-- MegaESP Имя: Имя MegaESP устройства для идентификации сообщений о смене состояния порта от MegaESP, например "DevA". Если имя не задано, то для этих целей будет использоватся номер инстанции драйвера.;
-- ioBroker веб-порт: Порт на котором ioBroker разворачивает веб сервер для приёма сообщений от MegaESP. MegaESP не поддерживает на данный момент порты отличные от 80. Значение по умолчанию: 80. 
+- IP Адрес устройства: IP адрес Mega-ESP;
+- Mega-ESP Имя: Имя Mega-ESP устройства для идентификации сообщений о смене состояния порта от Mega-ESP, например "DevA". Если имя не задано, то для этих целей будет использоватся номер инстанции драйвера.;
+- ioBroker веб-порт: Порт на котором ioBroker разворачивает веб сервер для приёма сообщений от Mega-ESP. Значение по умолчанию: 80. 
 - Интервал опроса (сек): инетрвал опроса портов в секундах;
-- MegaESP Пароль: пароль для доступа на MegaESP (максимально 3 символа). Значение по умолчанию: "sec";
+- Mega-ESP Пароль: пароль для доступа на Mega-ESP (максимально 3 символа). Значение по умолчанию: "sec";
 - Интервал для длинного нажатия (мс): если отжатие после нажатия кнопки произошло позже указанного интервала, то сгенерируется длинное нажатие;
 - Интервал двойного нажатия (мс): если между нажатиями пройдет меньше указанного времени, то сгенерируется двойное нажатие;
 
-В сетевых настройках MegaESP можно сконфигуририровать IP-адрес ioBroker. При каждом нажатии на кнопку MegaESP сообщает ioBroker (restAPI) номер сработавшего входа. 
+В сетевых настройках Mega-ESP можно сконфигуририровать IP-адрес ioBroker. При каждом нажатии на кнопку Mega-ESP сообщает ioBroker (restAPI) номер сработавшего входа. 
 
 Выглядит запрос примерно следующим образом:
 ´´´http://192.168.0.250/0/?pt=7´´´
@@ -96,29 +94,32 @@ To get the range of the analog value from 100 to 500 set the factor as 400 and o
 - Цифровой: Цифровой или аналоговый порт. ioBroker ожидает значени с аналогового порта в промежутке от 0 до 255.
 - Множитель:  множитель для значения **аналогового** порта.
 - Сдвиг: сдвиг для значения **аналогового** порта.
-- Длинное нажатие: если активировано, то порт будет генерировать событие "длинное нажатие" в объекте port_long (Порт должен быть цифровым и иметь тип "Переключатель")
+- Длинное нажатие: если активировано, то порт будет генерировать событие "длинное нажатие" в объекте port_long (Порт должен быть "цифровой вход" и иметь тип "при изменении")
 - Двойное нажатие: если активировано, то порт будет генерировать событие "double click" в объекте port_double
 
 Для выхода:
 
 ```
-MegaЗначение = (ioBrokerЗначение - Сдвиг) / Множитель;
+MegaESPЗначение = (ioBrokerЗначение - Сдвиг) / Множитель;
 ```
 
 Для входа:
 
 ```
-ioBrokerЗначение = MegaЗначение * Множитель + Сдвиг;
+ioBrokerЗначение = MegaESPЗначение * Множитель + Сдвиг;
 ```
 
 Например, что бы получить интервал значений от 100 до 500 нужно установить сдиг 100 и множитель 400.
 
-Только аналоговые порты принимают во внимание Множитель и Сдвиг.
+Только аналоговый порт P9 принимают во внимание Множитель и Сдвиг.
 
 **Порядок портов очень важен. Порт в первой колонке таблицы ассоциируется с портом P0 на MegaESP. Порт в колонке 10 с P9.**          
          
           
 ## Changelog
+### 0.1.0 (2017-03-19)
+* (ausHaus) add files
+
 ### 0.0.7 (2017-03-17)
 * (ausHaus) riname adapter
 
