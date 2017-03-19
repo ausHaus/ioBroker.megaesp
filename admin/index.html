@@ -24,10 +24,10 @@
 
 <script type="text/javascript">
     systemDictionary = {
-        "MegaESP Name:":        {"en": "MegaESP Name:",         "de": "MegaESP Name:",              "ru": "MegaESP Имя:"},
+        "Mega-ESP Name:":       {"en": "Mega-ESP Name:",        "de": "Mega-ESP Name:",             "ru": "Mega-ESP Имя:"},
         "ioBroker Web Port:":   {"en": "ioBroker Web Port:",    "de": "ioBroker Web Port:",         "ru": "ioBroker веб-порт:"},
         "Poll interval (sec):": {"en": "Poll interval (sec):",  "de": "Abfrage Intervall (sek):",   "ru": "Интервал опроса (сек):"},
-        "MegaESP Password:":    {"en": "MegaESP Password:",     "de": "MegaESP Kennword:",          "ru": "MegaESP Пароль:"},
+        "Mega-ESP Password:":   {"en": "Mega-ESP Password:",    "de": "Mega-ESP Kennword:",         "ru": "Mega-ESP Пароль:"},
         "name":                 {"en": "Name",                  "de": "Name",                       "ru": "Имя"},
         "input":                {"en": "Input",                 "de": "Eingang",                    "ru": "Вход"},
         "switch":               {"en": "Switch",                "de": "Schalter",                   "ru": "Переключатель"},
@@ -38,11 +38,11 @@
         "double":               {"en": "Double click ms",       "de": "Double click ms",            "ru": "Двойное нажатие"},
         "Ports":                {"en": "Ports",                 "de": "Ports",                      "ru": "Порты"},
         "Long press detect (ms):": {"en": "Long press detection (ms):", "de": "Langes-Drucken-Erkennung (ms):", "ru": "Интервал для длинного нажатия (мс):"},
-        "MegaESP-8266 adapter settings": {"en": "MegaESP-8266 adapter settings", "de": "MegaESP-8266 Adaptereinstellungen", "ru": "MegaESP-8266 настройки"},
-        "IP:":                  {"en": "MegaESP IP:",           "de": "MegaESP IP:",                "ru": "IP Адрес устройства:"},
+        "Mega-ESP adapter settings": {"en": "Mega-ESP adapter settings", "de": "Mega-ESP Adaptereinstellungen", "ru": "Mega-ESP настройки"},
+        "IP:":                  {"en": "Mega-ESP IP:",          "de": "Mega-ESP IP:",               "ru": "IP Адрес устройства:"},
         "Double press detect (ms):": {"en": "Double press detect (ms):", "de": "Doppelclick-Interval(ms):", "ru": "Интервал двойного нажатия (мс):"},
         "Add new port":         {"en": "Add new port",          "de": "Neuer Port",                 "ru": "Добавить порт"},
-        "Auto detect ports":    {"en": "Auto detect ports",     "de": "Auto-Detekt die Ports",      "ru": "Считать настройки с MegaESP"},
+        "Auto detect ports":    {"en": "Auto detect ports",     "de": "Auto-Detekt die Ports",      "ru": "Считать настройки с Mega-ESP"},
         "Write config to device": {"en": "Write config to device", "de": "Konfiguration in das Gerät schreiben", "ru": "Записать настройки в устройство"},
         "Name":                 {"en": "Name",                  "de": "Name",                       "ru": "Имя"},
         "Room":                 {"en": "Room",                  "de": "Zimmer",                     "ru": "Комната"},
@@ -302,13 +302,12 @@
                 text += _('Net:') + ' <input class="tvalue" data-type="ecm" type="text" data-port="' + index + '" value="' + portSettings.ecm  + '" style="width: 70px" maxsize="35"/>';
             } 
         }
-        // acm(Action) MCP
+        // acm(Action) MCP23017
         if (portSettings.in == 1) {
-            // acm(Action)
             text += _('Action:') + ' <input class="tvalue" data-type="am" type="text" data-port="' + index + '" value="' + (portSettings.am || '') + '"  style="width: 70px" maxsize="18"/>';
         }
 
-        //d(default state)
+        // d(default state)
         if (portSettings.pty == 1) {
             text += _('Default state:') + ' <select class="tvalue" data-type="d" data-port="' + index + '">';
             text += '<option value="0" ' + ((portSettings.d == 0) ? 'selected' : '') + '>' + _('off') + '</option>';
@@ -325,7 +324,7 @@
             text += _('Default state:') + ' <input class="tvalue" data-type="d" type="text" data-port="' + index + '" value="' + (portSettings.d || 0) + '" size=4 maxsize="3"/>';
         }
 
-        //Sensor type
+        // Sensor type
         if (portSettings.pty == 3) {
             modes = [
                 'none',
@@ -340,12 +339,12 @@
             text += '<option value="3" ' + ((portSettings.d == 3) ? 'selected' : '') + '>1W</option>';
             text += '</select>';
         }
-        //pwm
+        // pwm
         if (portSettings.pty == 4) {
             text += _('PWM:') + ' <input class="tvalue" data-type="pwm" type="text" data-port="' + index + '" value="' + (portSettings.pwm || 0) + '" size=4 maxsize="3"/>';
         }
 
-        //tr
+        // tr
         if (portSettings.pty == 0 || portSettings.pty == 2 || portSettings.pty == 3) {
             text += _('TR:') + ' <select class="tvalue" data-type="tr" data-port="' + index + '">';
             text += '<option value="0" ' + ((portSettings.tr == 0) ? 'selected' : '') + '>' + _('not monitored') + '</option>';
@@ -356,6 +355,7 @@
             text += '<option value="5" ' + ((portSettings.tr == 5) ? 'selected' : '') + '>Act & Mqtt</option>';
             text += '</select>';
         }
+        
         if (portSettings.in == 1) {
             text += _('TR:') + ' <select class="tvalue" data-type="rm" data-port="' + index + '">';
             text += '<option value="0" ' + ((portSettings.rm == 0) ? 'selected' : '') + '>' + _('not monitored') + '</option>';
@@ -364,9 +364,6 @@
         }
 
         if (portSettings.pty == 5) {
-            ////text += _('R:') + ' <input class="tvalue" data-type="r" type="text"  style="width: 70px" data-port="' + index + '" value="' + (portSettings.r || '') + '" maxsize="3"/>';
-            ////text += _('G:') + ' <input class="tvalue" data-type="g" type="text"  style="width: 70px" data-port="' + index + '" value="' + (portSettings.g || '') + '" maxsize="3"/>';
-            ////text += _('B:') + ' <input class="tvalue" data-type="b" type="text"  style="width: 70px" data-port="' + index + '" value="' + (portSettings.b || '') + '" maxsize="3"/>';
             text += _('Count:') + ' <input class="tvalue" data-type="pix" type="text"  style="width: 70px" data-port="' + index + '" value="' + (portSettings.pix || 0) + '" maxsize="3"/>';
         }
         
@@ -403,27 +400,21 @@
         }        
 
         //misc and adc(misc)
-        ///if ((portSettings.pty == 2 && portSettings.m != 0) || (portSettings.pty == 3 && portSettings.d == 3)) {
-        ////if ((portSettings.pty == 2 && portSettings.m != 0) || (portSettings.pty == 3 && (portSettings.d != 1 || portSettings.d != 2 || portSettings.d != 3))) {
         if (portSettings.pty == 3 && portSettings.d != 0 && portSettings.m != 0) {     
             text += _('Threshold:') + ' <input class="tvalue" data-type="misc" type="text"  style="width: 70px" data-port="' + index + '" value="' + (portSettings.misc || 0) + '" maxsize="3"/>';
             text += _('Hysteresis:') + ' <input class="tvalue" data-type="hy" type="text"  style="width: 70px" data-port="' + index + '" value="' + (portSettings.hy || 0) + '" maxsize="3"/>' + _(' * 0,1');
         }
         if (portSettings.pty == 2 && portSettings.m != 0) {
-        ////if (portSettings.pty == 2 && portSettings.m) {
             text += _('Threshold:') + ' <input class="tvalue" data-type="adc" type="text"  style="width: 70px" data-port="' + index + '" value="' + (portSettings.adc || 0) + '" maxsize="3"/>';
             text += _('Hysteresis:') + ' <input class="tvalue" data-type="hy" type="text"  style="width: 70px" data-port="' + index + '" value="' + (portSettings.hy || 0) + '" maxsize="3"/>';
         }
 
-        ///if (portSettings.pty == 2 || (portSettings.pty == 1 && portSettings.m)) {
         if (portSettings.pty == 2 || portSettings.pty == 4) {
             text += _('Offset:') + ' <input class="tvalue" data-type="offset" type="text" data-port="' + index + '" style="width: 30px" value="' + (portSettings.offset || 0) + '"/>';
             text += _('Factor:') + ' <input class="tvalue" data-type="factor" type="text" data-port="' + index + '" style="width: 30px" value="' + (portSettings.factor || 1) + '"/>';
         }
         if (portSettings.pty == 2) {     
-            ////text += _('Period:') + ' <input class="tvalue" data-type="d" type="text" data-port="' + index + '" style="width: 50px" value="' + (portSettings.d || 255) + '"/>' + _(' * 0,1s');
             text += _('Period:') + ' <input class="tvalue" data-type="d" type="text"  style="width: 50px" data-port="' + index + '" value="' + (portSettings.d || 0) + '" maxsize="3"/>' + _(' * 0,1s');
-            ////text += _('Period:') + ' <input class="tvalue" data-type="d" type="text" data-port="' + index + '" value="' + (portSettings.d || 0) + '" size=4 maxsize="3"/>' + _(' * 0,1s');;
         }
 
         if (portSettings.pty == 0) {
@@ -454,7 +445,6 @@
             ports[index][attr] = $(this).val();
         }
 
-        ///if (attr == 'm' || attr == 'pty' || attr == 'd') {
         if (attr == 'm' || attr == 'pty' || (ports[index].pty == 1 && attr == 'd') || (ports[index].pty == 3 && attr == 'd') || attr == 'tr') {
             // if input
             if (ports[index].pty == 0) {
@@ -497,7 +487,6 @@
                 if (ports[index].d      === undefined) ports[index].d = 0;
                 if (ports[index].adc    === undefined) ports[index].adc  = 0;
                 if (ports[index].tr     === undefined) ports[index].tr  = 0;
-                ///if (ports[index].m      === undefined) ports[index].m = 0;
                 if (ports[index].m      === undefined) ports[index].m = '';
             } else
             if (ports[index].pty == 3) {
@@ -510,16 +499,7 @@
                 if (ports[index].acm    === undefined) ports[index].acm  = '';
                 if (ports[index].mcm    === undefined) ports[index].mcm = '';
                 if (ports[index].tr     === undefined) ports[index].tr  = 0;
-                ///if (ports[index].d      === undefined) ports[index].d = 1;
                 if (ports[index].d      === undefined) ports[index].d = '';
-                /*if (ports[index].d != 3) {
-                    ports[index].misc = 0;
-                    ports[index].m    = 0;
-                } else {
-                    if (ports[index].misc   === undefined) ports[index].misc = 0;
-                    if (ports[index].m      === undefined) ports[index].m = 0;
-                }*/
-                ///if (ports[index].m > 3) ports[index].m = 0;
                 if (ports[index].m      === undefined) ports[index].m = 0;
             } else
             if (ports[index].pty == 4) {
@@ -546,9 +526,6 @@
                 if (ports[index].mcm    !== undefined) delete ports[index].mcm;
                 if (ports[index].pix    === undefined) ports[index].pix = 0;
                 if (ports[index].misc   !== undefined) delete ports[index].misc;
-                ////if (ports[index].r      === undefined) ports[index].r = '';
-                ////if (ports[index].g      === undefined) ports[index].g = '';
-                ////if (ports[index].b      === undefined) ports[index].b = '';
             } else
             if (ports[index].pty == 6) {
                 if (ports[index].factor !== undefined) delete ports[index].factor;
@@ -559,10 +536,7 @@
                 if (ports[index].ecm    !== undefined) delete ports[index].ecm;
                 if (ports[index].acm    !== undefined) delete ports[index].acm;
                 if (ports[index].mcm    !== undefined) delete ports[index].mcm;
-                ////if (ports[index].d      === undefined) ports[index].d = 0;
                 if (ports[index].misc   !== undefined) delete ports[index].misc;
-                ////if (ports[index].m      === undefined) ports[index].m = 0;
-                ////if (ports[index].m > 1) ports[index].m = 0;
             } else
             if (ports[index].pty == 7) {
                 if (ports[index].factor !== undefined) delete ports[index].factor;
@@ -573,10 +547,8 @@
                 if (ports[index].ecm    !== undefined) delete ports[index].ecm;
                 if (ports[index].acm    !== undefined) delete ports[index].acm;
                 if (ports[index].mcm    !== undefined) delete ports[index].mcm;
-                ////if (ports[index].d      === undefined) ports[index].d = 0;
                 if (ports[index].misc   !== undefined) delete ports[index].misc;
                 if (ports[index].m      === undefined) ports[index].m = '';
-                ////if (ports[index].m > 1) ports[index].m = 0;
             } else
             if (ports[index].pty == 8) {
                 if (ports[index].factor !== undefined) delete ports[index].factor;
@@ -590,7 +562,6 @@
                 if (ports[index].d      === undefined) ports[index].d = 255;
                 if (ports[index].misc   !== undefined) delete ports[index].misc;
                 if (ports[index].m      === undefined) ports[index].m = 0;
-                ////if (ports[index].m > 1) ports[index].m = 0;
             } else {
                 if (ports[index].factor !== undefined) delete ports[index].factor;
                 if (ports[index].offset !== undefined) delete ports[index].offset;
@@ -802,11 +773,9 @@
         $('#add').button({
             icons: {primary: 'ui-icon-plusthick'}
         }).click(function () {
-            ///if (ports.length == 14 || ports.length == 15) {
             if (ports.length == 9) {
                 ports.push({
                     pty:    2,
-                    ///name:   'A' + (ports.length - 8),
                     name:   'P' + ports.length,
                     acm:    '',
                     ecm:    '',
@@ -818,7 +787,6 @@
                     role:   'state',
                     room:   ''
                 });
-            ///} else {
             } else
             if (ports.length == 0 || ports.length == 1 || ports.length == 2 || ports.length == 3 || ports.length == 4 || ports.length == 5 || ports.length == 6 || ports.length == 7 || ports.length == 8) {
                 ports.push({
@@ -1027,12 +995,7 @@
                         aPorts[p].ecm     = aPorts[p].ecm  || '';
                         aPorts[p].m       = aPorts[p].m    || 0;
                         aPorts[p].tr      = aPorts[p].tr   || 0;
-                        ///aPorts[p].d       = aPorts[p].d    || 0;
-                        // Данная галочка говорит нам, что: если сервер доступен то используется режим P&R. Если нет, то: mode P(0), act 7:2
-                        ///if (aPorts[p].misc) {
-                            ///aPorts[p].m = 1;
-                        ///}
-
+                        
                         aPorts[p].long    = !!ports[p].long;
                         aPorts[p].double  = !!ports[p].double;
                         aPorts[p].role    = ports[p].role || 'state';
@@ -1051,10 +1014,7 @@
                     if (aPorts[p].pty == 1) {
                         // output digital port
                         aPorts[p].name    = ports[p].name || ('P' + p);
-                        ///aPorts[p].m       = aPorts[p].m   || 0;
                         aPorts[p].d       = aPorts[p].d   || 0;
-                        ///aPorts[p].pwm     = aPorts[p].pwm || 0;
-
                         aPorts[p].role    = ports[p].role || 'button';
                     } else
                     if (aPorts[p].in == 0) {
@@ -1066,7 +1026,6 @@
                     } else
                     if (aPorts[p].pty == 2) {
                         // ADC port
-                        ///aPorts[p].name    = ports[p].name  || ((p == 14 || p == 15) ? ('A' + (p - 8)) : ('P' + p));
                         aPorts[p].name    = ports[p].name  || ((p == 9) ? ('P' + p) : ('P' + p));
                         aPorts[p].acm     = aPorts[p].acm  || '';
                         aPorts[p].ecm     = aPorts[p].ecm  || '';
@@ -1085,16 +1044,10 @@
                         aPorts[p].m       = aPorts[p].m || 0;
                         aPorts[p].d       = aPorts[p].d || 0;
                         aPorts[p].role    = ports[p].role || 'value.temperature';
-                    ///} else if (_ports[p].indexOf('temp:') != -1) {
-                        // temperature - internal sensor
-                        ///aPorts[p].pty     = 4;
-                        ///aPorts[p].name    = ports[p].name || ('P' + p);
-                        ///aPorts[p].role    = ports[p].role || 'value.temperature';
                     } else
                     if (aPorts[p].pty == 4) {
                         // output digital port
                         aPorts[p].name    = ports[p].name || ('P' + p);
-                        ////aPorts[p].m       = aPorts[p].m   || 0;
                         aPorts[p].d       = aPorts[p].d   || 0;
                         aPorts[p].pwm     = aPorts[p].pwm || 0;
                         aPorts[p].role    = ports[p].role || 'button';
@@ -1102,25 +1055,17 @@
                     if (aPorts[p].pty == 5) {
                         // output digital port
                         aPorts[p].name    = ports[p].name || ('P' + p);
-                        ////aPorts[p].m       = aPorts[p].m   || 0;
-                        ////aPorts[p].d       = aPorts[p].d   || 0;
-                        
                         aPorts[p].role    = ports[p].role || 'indicator.RGB';
                     } else
                     if (aPorts[p].pty == 6) {
                         // output digital port
                         aPorts[p].name    = ports[p].name || ('P' + p);
-                        ////aPorts[p].m       = aPorts[p].m   || 0;
-                        ////aPorts[p].d       = aPorts[p].d   || 0;
-
                         aPorts[p].role    = ports[p].role || 'button';
                     } else
                     if (aPorts[p].pty == 7) {
                         // output digital port
                         aPorts[p].name    = ports[p].name || ('P' + p);
                         aPorts[p].m       = aPorts[p].m   || '';
-                        ////aPorts[p].d       = aPorts[p].d   || 0;
-
                         aPorts[p].role    = ports[p].role || 'button';
                     } else
                     if (aPorts[p].pty == 8) {
@@ -1228,17 +1173,17 @@
 <!-- you have to put your config page in a div with id adapter-container -->
 <div id="adapter-container">
 
-    <table><tr><td><img src="megad.png"></td><td><h3 class="translate">MegaESP-8266 adapter settings</h3></td></tr></table>
+    <table><tr><td><img src="megad.png"></td><td><h3 class="translate">Mega-ESP adapter settings</h3></td></tr></table>
 
     <table>
         <tr><td class="translate" style="text-align: right">IP:</td><td>                    <input  class="value" id="ip"/></select></td>
             <!--td style="padding-left: 10px"><select id="ips" style="display:none"></select>&nbsp;<button id="discover" class="translateB">Find devices</button></td></tr-->
-        <tr><td class="translate" style="text-align: right">MegaESP Name:</td><td>          <input  class="value" id="name"/></td>
+        <tr><td class="translate" style="text-align: right">Mega-ESP Name:</td><td>         <input  class="value" id="name"/></td>
             <td class="translate" style="text-align: right">Poll interval (sec):</td><td>   <input  class="value" id="pollInterval"  maxlength="3"/></td>
         <tr><td class="translate" style="text-align: right">ioBroker Web Port:</td><td>     <input  class="value" id="port"          maxlength="5"/></td>
             <td class="translate" style="text-align: right">Long press detect (ms):</td><td><input  class="value" id="longPress"     maxlength="4"/></td>
         </tr>
-        <tr><td class="translate" style="text-align: right">MegaESP Password:</td><td>      <input  class="value" id="password"      maxlength="3"/></td>
+        <tr><td class="translate" style="text-align: right">Mega-ESP Password:</td><td>     <input  class="value" id="password"      maxlength="3"/></td>
             <td class="translate" style="text-align: right">Double press detect (ms):</td><td><input  class="value" id="doublePress" maxlength="4"/></td>
         </tr>
     </table>
