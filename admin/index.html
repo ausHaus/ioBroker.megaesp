@@ -124,11 +124,6 @@
             "de": "Set new password or IP address",
             "ru": "Изменить IP или пароль на устройстве"
         },
-        "Take new settings into config:": {
-            "en": "Take new settings into config:",
-            "de": "Neue Einstellungen übernehmen:",
-            "ru": "Перенять новые настройки:"
-        },
         "Ok":                   {"en": "Ok",                    "de": "Ok",                         "ru": "Ok"},
         "Cancel":               {"en": "Cancel",                "de": "Abrechen",                   "ru": "Отмена"},
         "Error":                {"en": "Error",                 "de": "Fehler",                     "ru": "Ошибка"},
@@ -185,11 +180,14 @@
             if (index == 0 || index == 1 || index == 3 || index == 4 || index == 5 || index == 7 || index == 8) {
                 text += '<option value="3" '   + ((portSettings.pty == 3)   ? 'selected' : '') + '>' + _('Digital Sensor')  + '</option>';
             }
+            if (index == 0) {
+                text += '<option value="9" '   + ((portSettings.pty == 9)   ? 'selected' : '') + '>' + _('DSenBUS')         + '</option>';
+            }
             if (index == 7) {
-                text += '<option value="6" '   + ((portSettings.pty == 6)   ? 'selected' : '') + '>' + _('Bus I2C_SDA')         + '</option>';
+                text += '<option value="6" '   + ((portSettings.pty == 6)   ? 'selected' : '') + '>' + _('Bus I2C_SDA')     + '</option>';
             }
             if (index == 8) {
-                text += '<option value="7" '   + ((portSettings.pty == 7)   ? 'selected' : '') + '>' + _('Bus I2C_SCL')         + '</option>';
+                text += '<option value="7" '   + ((portSettings.pty == 7)   ? 'selected' : '') + '>' + _('Bus I2C_SCL')     + '</option>';
             }
             if (index == 9) {
                 text += '<option value="2" '   + ((portSettings.pty == 2)   ? 'selected' : '') + '>' + _('ADC')             + '</option>';
@@ -322,6 +320,9 @@
         }
         if (portSettings.pty == 4) {
             text += _('Default state:') + ' <input class="tvalue" data-type="d" type="text" data-port="' + index + '" value="' + (portSettings.d || 0) + '" size=4 maxsize="3"/>';
+        }
+        if (portSettings.pty == 9) {
+            text += _('Count (1-10):') + ' <input class="tvalue" data-type="d" type="text" data-port="' + index + '" value="' + (portSettings.d || 0) + '" size=1 maxsize="2"/>';
         }
 
         // Sensor type
@@ -562,6 +563,16 @@
                 if (ports[index].d      === undefined) ports[index].d = 255;
                 if (ports[index].misc   !== undefined) delete ports[index].misc;
                 if (ports[index].m      === undefined) ports[index].m = 0;
+            } else
+            if (ports[index].pty == 9) {
+                if (ports[index].factor !== undefined) delete ports[index].factor;
+                if (ports[index].offset !== undefined) delete ports[index].offset;
+                if (ports[index].long   !== undefined) delete ports[index].long;
+                if (ports[index].double !== undefined) delete ports[index].double;
+                if (ports[index].ecm    !== undefined) delete ports[index].ecm;
+                if (ports[index].acm    !== undefined) delete ports[index].acm;
+                if (ports[index].mcm    !== undefined) delete ports[index].mcm;
+                if (ports[index].d      === undefined) ports[index].d = 0;
             } else {
                 if (ports[index].factor !== undefined) delete ports[index].factor;
                 if (ports[index].offset !== undefined) delete ports[index].offset;
@@ -1075,6 +1086,12 @@
                         aPorts[p].d       = aPorts[p].d   || 255;
                         
                         aPorts[p].role    = ports[p].role || 'button';
+                    } else
+                    if (aPorts[p].pty == 9) {
+                        // temperature - 1wire bus
+                        aPorts[p].name    = ports[p].name || ('P' + p);
+                        aPorts[p].d       = aPorts[p].d || 0;
+                        aPorts[p].role    = ports[p].role || 'value.temperature';
                     } else {
                         // unknown settings
                         aPorts[p].pty     = 255;
