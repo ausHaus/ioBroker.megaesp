@@ -2,7 +2,7 @@
 ioBroker Mega-ESP adapter
 =================
 
-[![NPM version](http://img.shields.io/npm/v/iobroker.megaesp.svg)](https://www.npmjs.com/package/iobroker.megaesp)
+![Number of Installations](http://iobroker.live/badges/megaesp-installed.svg) ![Number of Installations](http://iobroker.live/badges/megaesp-stable.svg) [![NPM version](http://img.shields.io/npm/v/iobroker.megaesp.svg)](https://www.npmjs.com/package/iobroker.megaesp)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.megaesp.svg)](https://www.npmjs.com/package/iobroker.megaesp)
 
 [![NPM](https://nodei.co/npm/iobroker.megaesp.png?downloads=true)](https://nodei.co/npm/iobroker.megaesp/)
